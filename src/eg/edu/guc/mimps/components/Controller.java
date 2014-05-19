@@ -1,6 +1,6 @@
 package eg.edu.guc.mimps.components;
 
-public class ALU implements Executable {
+public class Controller implements Executable {
 
 	@Override
 	public void read() {
@@ -19,5 +19,5 @@ public class ALU implements Executable {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 }
