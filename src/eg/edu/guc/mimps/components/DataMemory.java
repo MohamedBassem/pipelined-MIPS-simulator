@@ -1,12 +1,10 @@
 package eg.edu.guc.mimps.components;
 
+import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
+import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
+
 public class DataMemory implements Executable {
 
-	@Override
-	public void read() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void execute() {
