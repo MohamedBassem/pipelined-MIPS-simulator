@@ -1,23 +1,49 @@
 package eg.edu.guc.mimps.components;
 
+import java.util.HashMap;
+
+import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
+import eg.edu.guc.mimps.registers.Memory;
+import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
+
 public class DataMemory implements Executable {
 
-	@Override
-	public void read() {
-		// TODO Auto-generated method stub
-		
+	ExecuteMemoryRegisters executeMemoryRegisters;
+	MemoryWritebackRegisters memoryWritebackRegisters;
+	
+	Memory memory;
+	
+	MemoryWritebackRegisters newMemoryWritebackRegisters;
+
+	public DataMemory(ExecuteMemoryRegisters executeMemoryRegisters,
+			MemoryWritebackRegisters memoryWritebackRegisters,
+			Memory memory) {
+		this.executeMemoryRegisters = executeMemoryRegisters;
+		this.memoryWritebackRegisters = memoryWritebackRegisters;
+		this.memory = memory;
 	}
 
 	@Override
 	public void execute() {
-		// TODO Auto-generated method stub
+		newMemoryWritebackRegisters = memoryWritebackRegisters.clone(); 
+		newMemoryWritebackRegisters.setALUResult(executeMemoryRegisters.getALUResult());
+		newMemoryWritebackRegisters.setWriteBackRegister(executeMemoryRegisters.getWriteBackRegister());
+		newMemoryWritebackRegisters.setRegWrite(executeMemoryRegisters.isRegWrite());
+		newMemoryWritebackRegisters.setMemToReg(executeMemoryRegisters.isMemToReg());
+		
+		if(executeMemoryRegisters.isMemRead()){
+			newMemoryWritebackRegisters.setMemoryWord(memory.get(executeMemoryRegisters.getALUResult()));
+		}
+		
+		if(executeMemoryRegisters.isMemWrite()){
+			memory.put(executeMemoryRegisters.getALUResult(),executeMemoryRegisters.getRegisterValueToMemory());
+		}
 		
 	}
 
 	@Override
 	public void write() {
-		// TODO Auto-generated method stub
-		
+		memoryWritebackRegisters.replace(newMemoryWritebackRegisters);
 	}
 
 }

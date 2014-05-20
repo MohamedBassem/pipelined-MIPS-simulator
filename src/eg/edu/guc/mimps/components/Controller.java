@@ -1,11 +1,14 @@
 package eg.edu.guc.mimps.components;
 
+import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
+import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
+
 public class Controller implements Executable {
 
-	@Override
-	public void read() {
-		// TODO Auto-generated method stub
-		
+	public Controller(
+			InstructionFetchDecodeRegisters instructionFetchDecodeRegisters,
+			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters) {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override

@@ -1,11 +1,14 @@
 package eg.edu.guc.mimps.components;
 
+import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
+import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
+
 public class ALU implements Executable {
 
-	@Override
-	public void read() {
-		// TODO Auto-generated method stub
-		
+	public ALU(
+			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
+			ExecuteMemoryRegisters executeMemoryRegisters) {
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
