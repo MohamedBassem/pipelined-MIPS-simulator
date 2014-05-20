@@ -107,6 +107,25 @@ public class InstructionDecodeExecuteRegisters {
 	public void setRd(int rd) {
 		this.rd = rd;
 	}
-
+	
+	
+	public InstructionDecodeExecuteRegisters clone(){
+		InstructionDecodeExecuteRegisters clone = new InstructionDecodeExecuteRegisters();
+		clone.setAluOpt(aluOpt);
+		clone.setAluSrc(aluSrc);
+		clone.setBranch(branch);
+		clone.setIncrementedPc(incrementedPc);
+		clone.setMemRead(memRead);
+		clone.setMemToReg(memToReg);
+		clone.setMemWrite(memWrite);
+		clone.setRd(rd);
+		clone.setRegDest(regDest);
+		clone.setRegister1Value(register1Value);
+		clone.setRegister2Value(register2Value);
+		clone.setRegWrite(regWrite);
+		clone.setRt(rt);
+		clone.setSignExtendedOffset(signExtendedOffset);
+		return clone;
+	}
 
 }

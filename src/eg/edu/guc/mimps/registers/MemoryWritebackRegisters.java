@@ -40,4 +40,14 @@ public class MemoryWritebackRegisters {
 	public void setMemToReg(boolean memToReg) {
 		this.memToReg = memToReg;
 	}
+	
+	public MemoryWritebackRegisters clone(){
+		MemoryWritebackRegisters clone = new MemoryWritebackRegisters();
+		clone.setALUResult(ALUResult);
+		clone.setMemoryWord(memoryWord);
+		clone.setMemToReg(memToReg);
+		clone.setRegWrite(regWrite);
+		clone.setWriteBackRegister(writeBackRegister);
+		return clone;
+	}
 }

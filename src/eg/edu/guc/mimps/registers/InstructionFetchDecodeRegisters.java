@@ -17,4 +17,11 @@ public class InstructionFetchDecodeRegisters {
 	public void setIncrementedPc(int incrementedPc) {
 		this.incrementedPc = incrementedPc;
 	}
+	
+	public InstructionFetchDecodeRegisters clone(){
+		InstructionFetchDecodeRegisters clone = new InstructionFetchDecodeRegisters();
+		clone.setIncrementedPc(incrementedPc);
+		clone.setInstruction(instruction);
+		return clone;
+	}
 }

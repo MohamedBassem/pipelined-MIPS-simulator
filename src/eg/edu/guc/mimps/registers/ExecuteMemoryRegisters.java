@@ -76,5 +76,20 @@ public class ExecuteMemoryRegisters {
 	public void setMemToReg(boolean memToReg) {
 		this.memToReg = memToReg;
 	}
+	
+	public ExecuteMemoryRegisters clone(){
+		ExecuteMemoryRegisters clone = new ExecuteMemoryRegisters();
+		clone.setALUResult(ALUResult);
+		clone.setBranch(branch);
+		clone.setBranchAddress(branchAddress);
+		clone.setMemRead(memRead);
+		clone.setMemToReg(memToReg);
+		clone.setMemWrite(memWrite);
+		clone.setRegisterValueToMemory(registerValueToMemory);
+		clone.setWriteBackRegister(writeBackRegister);
+		clone.setZero(zero);
+		clone.setRegWrite(regWrite);
+		return clone;
+	}
 		
 }
