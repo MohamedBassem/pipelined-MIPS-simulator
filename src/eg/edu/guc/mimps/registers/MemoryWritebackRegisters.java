@@ -50,4 +50,12 @@ public class MemoryWritebackRegisters {
 		clone.setWriteBackRegister(writeBackRegister);
 		return clone;
 	}
+	
+	public void replace(MemoryWritebackRegisters memoryWritebackRegisters){
+		this.setALUResult(memoryWritebackRegisters.getALUResult());
+		this.setMemoryWord(memoryWritebackRegisters.getMemoryWord());
+		this.setMemToReg(memoryWritebackRegisters.isMemToReg());
+		this.setRegWrite(memoryWritebackRegisters.isRegWrite());
+		this.setWriteBackRegister(memoryWritebackRegisters.getWriteBackRegister());
+	}
 }

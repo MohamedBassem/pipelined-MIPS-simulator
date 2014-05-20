@@ -91,5 +91,18 @@ public class ExecuteMemoryRegisters {
 		clone.setRegWrite(regWrite);
 		return clone;
 	}
+	
+	public void replace(ExecuteMemoryRegisters executeMemoryRegisters){
+		this.setALUResult(executeMemoryRegisters.getALUResult());
+		this.setBranch(executeMemoryRegisters.isBranch());
+		this.setBranchAddress(executeMemoryRegisters.getBranchAddress());
+		this.setMemRead(executeMemoryRegisters.isMemRead());
+		this.setMemToReg(executeMemoryRegisters.isMemToReg());
+		this.setMemWrite(executeMemoryRegisters.isMemWrite());
+		this.setRegisterValueToMemory(executeMemoryRegisters.getRegisterValueToMemory());
+		this.setWriteBackRegister(executeMemoryRegisters.getWriteBackRegister());
+		this.setZero(executeMemoryRegisters.isZero());
+		this.setRegWrite(executeMemoryRegisters.isRegWrite());
+	}
 		
 }

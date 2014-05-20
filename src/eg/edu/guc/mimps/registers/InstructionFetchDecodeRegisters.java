@@ -24,4 +24,9 @@ public class InstructionFetchDecodeRegisters {
 		clone.setInstruction(instruction);
 		return clone;
 	}
+	
+	public void replace(InstructionFetchDecodeRegisters instructionFetchDecodeRegisters){
+		this.setIncrementedPc(instructionFetchDecodeRegisters.getIncrementedPc());
+		this.setInstruction(instructionFetchDecodeRegisters.getInstruction());
+	}
 }
