@@ -5,7 +5,7 @@ import java.io.Reader;
 import eg.edu.guc.mimps.components.Executable;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
 
-public class Assembler implements Executable {
+public class Assembler {
 
 	public Assembler(int origin, Reader sourceCode, InstructionFetchDecodeRegisters instructionFetchDecodeRegisters) {
 		
@@ -14,16 +14,8 @@ public class Assembler implements Executable {
 	public boolean execute(int line) {
 		return false;
 	}
-
-	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void write() {
-		// TODO Auto-generated method stub
-		
+	
+	public void write(){
+		// TODO
 	}
 }
