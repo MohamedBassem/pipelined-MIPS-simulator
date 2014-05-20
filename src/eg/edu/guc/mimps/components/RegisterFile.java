@@ -6,11 +6,22 @@ import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
 
 public class RegisterFile implements Executable {
 
+	InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
+	InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
+	MemoryWritebackRegisters memoryWritebackRegisters;
+	
 	public RegisterFile(
 			InstructionFetchDecodeRegisters instructionFetchDecodeRegisters,
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
 			MemoryWritebackRegisters memoryWritebackRegisters) {
+		this.instructionFetchDecodeRegisters = instructionFetchDecodeRegisters.clone();
+		this.instructionDecodeExecuteRegisters = instructionDecodeExecuteRegisters.clone();
+		this.memoryWritebackRegisters = memoryWritebackRegisters.clone();
 		// TODO Auto-generated constructor stub
+	}
+	
+	public static void main(String[]ar) {
+		
 	}
 
 	@Override
