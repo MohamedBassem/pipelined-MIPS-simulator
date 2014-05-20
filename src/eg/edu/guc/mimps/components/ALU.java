@@ -2,6 +2,7 @@ package eg.edu.guc.mimps.components;
 
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
+import eg.edu.guc.mimps.utils.BinaryManiplator;
 
 public class ALU implements Executable {
 	
@@ -41,6 +42,7 @@ public class ALU implements Executable {
 
 		boolean regWrite = prevRegister.isRegWrite();
 		boolean memToReg = prevRegister.isMemToReg();
+		
 		
 		
 		
@@ -86,11 +88,34 @@ public class ALU implements Executable {
 		return 0;
 	}
 	
-	private int shiftLeftLogical(int first, int second) {
+	private int setLessThanUnsigned(int first, int second) {
+		for(int i = 31; i >= 0; i--) {
+			boolean bitOfFiirst = BinaryManiplator.getBitByIndex(first, i);
+			boolean bitOfSecond = BinaryManiplator.getBitByIndex(second, i);
+			if(!bitOfFiirst && bitOfSecond)
+				return 1;
+		}
+		
 		return 0;
 	}
 	
+	private int shiftLeftLogical(int first, int second) {
+		return first << second;
+	}
+	
 	private int rightLeftLogical(int first, int second) {
+		return first >>> second;
+	}
+	
+	private int branchIfEqual(int first, int second){
+		if (first == second)
+			return 1;
+		return 0;
+	}
+	
+	private int branchIfNotEqual(int first, int second) {
+		if (first != second)
+			return 1;
 		return 0;
 	}
 
