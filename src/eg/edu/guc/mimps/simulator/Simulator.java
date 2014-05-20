@@ -10,7 +10,9 @@ import eg.edu.guc.mimps.components.RegisterFile;
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
+import eg.edu.guc.mimps.registers.Memory;
 import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
+import eg.edu.guc.mimps.registers.Registers;
 
 public class Simulator {
 	
@@ -38,10 +40,13 @@ public class Simulator {
 		executeMemoryRegisters = new ExecuteMemoryRegisters();
 		memoryWritebackRegisters = new MemoryWritebackRegisters();
 		
+		Memory memory = new Memory();
+		Registers registers = new Registers();
+		
 		controller = new Controller(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters);
 		registerFile = new RegisterFile(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters,memoryWritebackRegisters);
 		alu = new ALU(instructionDecodeExecuteRegisters,executeMemoryRegisters);
-		dataMemory = new DataMemory(executeMemoryRegisters,memoryWritebackRegisters);
+		dataMemory = new DataMemory(executeMemoryRegisters,memoryWritebackRegisters,memory);
 	}
 	
 	public void run(int origin,String data){
