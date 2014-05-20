@@ -21,6 +21,11 @@ public class DataMemory implements Executable {
 	private boolean regWrite;
 	private boolean memToReg;
 
+	public DataMemory(ExecuteMemoryRegisters executeMemoryRegisters2,
+			MemoryWritebackRegisters memoryWritebackRegisters2) {
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public void execute() {
 		ALUResult = executeMemoryRegisters.getALUResult();
