@@ -1,5 +1,7 @@
 package eg.edu.guc.mimps.components;
 
+import eg.edu.guc.mimps.assembler.Assembler;
+import eg.edu.guc.mimps.assembler.Instruction;
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
 import eg.edu.guc.mimps.utils.BinaryManiplator;
@@ -28,7 +30,8 @@ public class ALU implements Executable {
 	public ALU(
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
 			ExecuteMemoryRegisters executeMemoryRegisters) {
-		// TODO Auto-generated constructor stub
+			prevRegister = instructionDecodeExecuteRegisters;
+			nextRegister = executeMemoryRegisters;
 	}
 
 
