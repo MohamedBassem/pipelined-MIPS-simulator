@@ -21,9 +21,17 @@ public class ALU implements Executable {
 	private boolean regWriteALU;
 	private boolean memToRegALU;
 
+
 	InstructionDecodeExecuteRegisters prevRegister;
 	ExecuteMemoryRegisters nextRegister;
 	
+	public ALU(
+			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
+			ExecuteMemoryRegisters executeMemoryRegisters) {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public void execute() {
 		int incrementedPc = prevRegister.getIncrementedPc();
 		int register1Value = prevRegister.getRegister1Value();

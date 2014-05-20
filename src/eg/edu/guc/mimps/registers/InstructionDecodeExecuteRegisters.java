@@ -107,6 +107,45 @@ public class InstructionDecodeExecuteRegisters {
 	public void setRd(int rd) {
 		this.rd = rd;
 	}
-
+	
+	
+	public InstructionDecodeExecuteRegisters clone(){
+		InstructionDecodeExecuteRegisters clone = new InstructionDecodeExecuteRegisters();
+		clone.setAluOpt(aluOpt);
+		clone.setAluSrc(aluSrc);
+		clone.setBranch(branch);
+		clone.setIncrementedPc(incrementedPc);
+		clone.setMemRead(memRead);
+		clone.setMemToReg(memToReg);
+		clone.setMemWrite(memWrite);
+		clone.setRd(rd);
+		clone.setRegDest(regDest);
+		clone.setRegister1Value(register1Value);
+		clone.setRegister2Value(register2Value);
+		clone.setRegWrite(regWrite);
+		clone.setRt(rt);
+		clone.setSignExtendedOffset(signExtendedOffset);
+		return clone;
+	}
+	
+	public void replaceRegister(InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters){
+		this.setIncrementedPc(instructionDecodeExecuteRegisters.getIncrementedPc());
+		this.setRd(instructionDecodeExecuteRegisters.getRd());
+		this.setRt(instructionDecodeExecuteRegisters.getRt());
+		this.setRegister1Value(instructionDecodeExecuteRegisters.getRegister1Value());
+		this.setRegister2Value(instructionDecodeExecuteRegisters.getRegister2Value());
+		this.setSignExtendedOffset(instructionDecodeExecuteRegisters.getSignExtendedOffset());
+	}
+	
+	public void replaceControll(InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters){
+		this.setAluOpt(instructionDecodeExecuteRegisters.getAluOpt());
+		this.setAluSrc(instructionDecodeExecuteRegisters.isAluSrc());
+		this.setBranch(instructionDecodeExecuteRegisters.isBranch());
+		this.setMemRead(instructionDecodeExecuteRegisters.isMemRead());
+		this.setMemToReg(instructionDecodeExecuteRegisters.isMemToReg());
+		this.setMemWrite(instructionDecodeExecuteRegisters.isMemWrite());
+		this.setRegDest(instructionDecodeExecuteRegisters.isRegDest());
+		this.setRegWrite(instructionDecodeExecuteRegisters.isRegWrite());
+	}
 
 }
