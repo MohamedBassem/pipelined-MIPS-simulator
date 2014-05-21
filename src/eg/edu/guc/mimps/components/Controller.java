@@ -6,12 +6,12 @@ import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
 
 public class Controller implements Executable {
-	String rformatControls = "110000010";
-	String iformatControls = "0XX100010";
+	String rformatControls = "1000010";
+	String iformatControls = "0100010";
 	String jformatControls = ""; 
-	String loadControls = "000101011";
-	String storeControls = "X0010010X";
-	String branchControls = "X0101000X";
+	String loadControls = "0101011";
+	String storeControls = "X10010X";
+	String branchControls = "X01000X";
 	String control;
 	
 	public  InstructionFetchDecodeRegisters instructionFetchDecodeRegisters; 
@@ -26,8 +26,7 @@ public class Controller implements Executable {
 
 	@Override
 	public void execute() {
-		// InstructionFormat format = instructionFetchDecodeRegisters.getInstruction().format;  
-		int opCode=0; 
+		int opCode=0; // will get this value from previous component
 		String instructionType=toInstructionType(opCode); 
 		 this.control = getControlString(instructionType);
 
@@ -36,12 +35,12 @@ public class Controller implements Executable {
 	@Override
 	public void write() {
 		instructionDecodeExecuteRegisters.setRegDest(toBoolean(control.charAt(0)));
-		instructionDecodeExecuteRegisters.setAluSrc(toBoolean(control.charAt(3)));
-		instructionDecodeExecuteRegisters.setBranch(toBoolean(control.charAt(4)));
-		instructionDecodeExecuteRegisters.setMemRead(toBoolean(control.charAt(5)));
-		instructionDecodeExecuteRegisters.setMemWrite(toBoolean(control.charAt(6)));
-		instructionDecodeExecuteRegisters.setRegWrite(toBoolean(control.charAt(7)));
-		instructionDecodeExecuteRegisters.setMemToReg(toBoolean(control.charAt(8)));
+		instructionDecodeExecuteRegisters.setAluSrc(toBoolean(control.charAt(1)));
+		instructionDecodeExecuteRegisters.setBranch(toBoolean(control.charAt(2)));
+		instructionDecodeExecuteRegisters.setMemRead(toBoolean(control.charAt(3)));
+		instructionDecodeExecuteRegisters.setMemWrite(toBoolean(control.charAt(4)));
+		instructionDecodeExecuteRegisters.setRegWrite(toBoolean(control.charAt(5)));
+		instructionDecodeExecuteRegisters.setMemToReg(toBoolean(control.charAt(6)));
 	}
 
 	public boolean toBoolean(char value) {
@@ -78,6 +77,7 @@ public class Controller implements Executable {
 	public String toInstructionType(int opCode){
 	String type="";
 	switch(opCode){
+	//will change case depending on opCodes 
 	case 1 :type= "rType" ; break;
 	case 2: type= "iType"; break; 
 	case 3: type= "jType"; break; 
