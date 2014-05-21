@@ -24,12 +24,6 @@ public class RegisterFile implements Executable {
 		this.registers = registers; 
 	}
 	
-	public static void main(String[]ar) {
-		System.out.println(1<<31);
-		String y = Integer.toBinaryString(signExtend((int)Math.pow(2, 4)));
-		System.out.println(y);
-	}
-	
 	private static int signExtend(int val) {
 		int mostSigBit = val & (1 << 15);
 		System.out.println(Integer.toBinaryString(val));
