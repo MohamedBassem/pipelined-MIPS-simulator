@@ -3,7 +3,6 @@ package eg.edu.guc.mimps.assembler;
 public class Instruction {
 
 	private int instuction;
-	public InstructionFormat format;
 	
 	protected Instruction() {
 		
