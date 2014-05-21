@@ -14,5 +14,5 @@ public class Registers {
 	public void setReg(int reg, int data) {
 		registers[reg] = data;
 	}
-	
+
 }

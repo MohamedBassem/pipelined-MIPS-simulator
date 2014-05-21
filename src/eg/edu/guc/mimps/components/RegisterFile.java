@@ -12,7 +12,7 @@ public class RegisterFile implements Executable {
 	InstructionDecodeExecuteRegisters newIDER;
 	MemoryWritebackRegisters memoryWritebackRegisters;
 	Registers registers;
-	
+
 	public RegisterFile(
 			InstructionFetchDecodeRegisters instructionFetchDecodeRegisters,
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
