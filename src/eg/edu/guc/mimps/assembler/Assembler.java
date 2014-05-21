@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
+import eg.edu.guc.mimps.components.Executable;
+import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
 
 public class Assembler {
 	
@@ -19,12 +20,6 @@ public class Assembler {
 	private Map<String, String> types;
 	private int origin;
 	private static final int wordSize = 4;
-	
-	public Assembler(int origin, Reader sourceCode) {
-		labels = new HashMap<String, Integer>();
-		instructions = new HashMap<Integer, Instruction>();
-		originalLine = new HashMap<Integer, Integer>();
-	}
 	
 	private void initTypes() {
 		types = new HashMap<String, String>();
@@ -46,7 +41,12 @@ public class Assembler {
 		types.put("bne", "I");
 		types.put("j", "J");
 		types.put("jal", "R");
+
+	}
+
+	public Assembler(int origin, Reader sourceCode, InstructionFetchDecodeRegisters instructionFetchDecodeRegisters) {
 		
+	
 	}
 	
 	public boolean execute(int line) {
@@ -95,7 +95,7 @@ public class Assembler {
 			matcher = pat.matcher(instruction);
 			decodeIInstruction(matcher.group(1), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(4)), Integer.parseInt(matcher.group(3)));;
 		
-		a} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ,]+) *,? *([0-9]+)\\( *\\$([^ ]+) *\\)"))) {
+		} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ,]+) *,? *([0-9]+)\\( *\\$([^ ]+) *\\)"))) {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 		} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ,]+) *,? *\\$([^ ,]+) *,? *([0-9]+)"))) {
@@ -105,6 +105,7 @@ public class Assembler {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 		}
+		return null;
 	}
 	
 	private boolean decodeRInstruction(String name, int rd, int rs, int rt, int shamt) {
@@ -143,4 +144,8 @@ public class Assembler {
 		return result;
 	}
 	
+	public void write(){
+		// TODO
+	}
+
 }
