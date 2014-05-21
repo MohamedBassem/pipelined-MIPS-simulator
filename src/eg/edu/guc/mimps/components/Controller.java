@@ -1,17 +1,18 @@
 package eg.edu.guc.mimps.components;
 
+import eg.edu.guc.mimps.assembler.Instruction;
+import eg.edu.guc.mimps.assembler.InstructionFormat;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
 
 public class Controller implements Executable {
 	String rformatControls = "110000010";
-	String iformatControls = "";
+	String iformatControls = "0XX100010";
 	String jformatControls = ""; 
 	String loadControls = "000101011";
 	String storeControls = "X0010010X";
 	String branchControls = "X0101000X";
 	String control;
-	//String instructionType;
 	
 	public  InstructionFetchDecodeRegisters instructionFetchDecodeRegisters; 
 	public InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
@@ -25,7 +26,10 @@ public class Controller implements Executable {
 
 	@Override
 	public void execute() {
-		this.control = getControlString("");
+		// InstructionFormat format = instructionFetchDecodeRegisters.getInstruction().format;  
+		int opCode=0; 
+		String instructionType=toInstructionType(opCode); 
+		 this.control = getControlString(instructionType);
 
 	}
 
@@ -70,5 +74,17 @@ public class Controller implements Executable {
 
 		}
 		return instructionType;
+	}
+	public String toInstructionType(int opCode){
+	String type="";
+	switch(opCode){
+	case 1 :type= "rType" ; break;
+	case 2: type= "iType"; break; 
+	case 3: type= "jType"; break; 
+	case 4: type= "branch"; break; 
+	case 5: type= "store";break;
+	case 6: type= "load"; break; 
+	}
+	return type;
 	}
 }

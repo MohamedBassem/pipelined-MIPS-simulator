@@ -1,14 +1,17 @@
 package eg.edu.guc.mimps.registers;
 
+import eg.edu.guc.mimps.assembler.Instruction;
+
+
 public class InstructionFetchDecodeRegisters {
-	private int instruction;
+	private Instruction instruction;
 	private int incrementedPc;
 	
 	
-	public int getInstruction() {
+	public Instruction getInstruction() {
 		return instruction;
 	}
-	public void setInstruction(int instruction) {
+	public void setInstruction(Instruction instruction) {
 		this.instruction = instruction;
 	}
 	public int getIncrementedPc() {
