@@ -19,8 +19,8 @@ public class Controller implements Executable {
 	public Controller(
 			InstructionFetchDecodeRegisters instructionFetchDecodeRegisters,
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters) {
-		instructionFetchDecodeRegisters=this.instructionFetchDecodeRegisters;
-		instructionDecodeExecuteRegisters =this.instructionDecodeExecuteRegisters;
+		this.instructionFetchDecodeRegisters= instructionFetchDecodeRegisters;
+		this.instructionDecodeExecuteRegisters = instructionDecodeExecuteRegisters;
 		
 	}
 
