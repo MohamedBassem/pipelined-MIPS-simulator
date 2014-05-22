@@ -44,7 +44,8 @@ public class Simulator {
 		Registers registers = new Registers();
 		
 		controller = new Controller(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters);
-		registerFile = new RegisterFile(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters,memoryWritebackRegisters);
+		registerFile = new RegisterFile(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters,
+										memoryWritebackRegisters, registers);
 		alu = new ALU(instructionDecodeExecuteRegisters,executeMemoryRegisters);
 		dataMemory = new DataMemory(executeMemoryRegisters,memoryWritebackRegisters,memory);
 	}
