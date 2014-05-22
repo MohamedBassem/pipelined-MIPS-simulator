@@ -74,6 +74,17 @@ public class ALU implements Executable {
 			case Constants.SLTU_FUNC: ALUResultALU = setLessThanUnsigned(register1Value, register2Value);break;
 			default:break;
 			}
+		} else {
+			switch (opCode) {
+			case Constants.ADDI_OPCODE:
+			case Constants.SW_OPCODE:
+			case Constants.LW_OPCODE: ALUResultALU = add(register1Value, signExtendedOffset);break;
+			case Constants.ANDI_OPCODE: ALUResultALU = and(register1Value, signExtendedOffset);break;
+			case Constants.ORI_OPCODE: ALUResultALU = or(register1Value, signExtendedOffset);break;
+			case Constants.BEQ_OPCODE: ALUResultALU = branchIfEqual(register1Value, register2Value);break;
+			case Constants.BNE_OPCODE: ALUResultALU = branchIfNotEqual(register1Value, register2Value);break;
+			default:break;
+			}
 		}
 		
 		
