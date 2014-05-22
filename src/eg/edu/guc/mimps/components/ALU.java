@@ -1,10 +1,13 @@
 package eg.edu.guc.mimps.components;
 
+import com.sun.media.sound.AlawCodec;
+
 import eg.edu.guc.mimps.assembler.Assembler;
 import eg.edu.guc.mimps.assembler.Instruction;
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
 import eg.edu.guc.mimps.utils.BinaryManiplator;
+import eg.edu.guc.mimps.utils.Constants;
 
 public class ALU implements Executable {
 	
@@ -26,6 +29,7 @@ public class ALU implements Executable {
 
 	InstructionDecodeExecuteRegisters prevRegister;
 	ExecuteMemoryRegisters nextRegister;
+	Instruction instruction;
 	
 	public ALU(
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
@@ -54,7 +58,23 @@ public class ALU implements Executable {
 		boolean regWrite = prevRegister.isRegWrite();
 		boolean memToReg = prevRegister.isMemToReg();
 		
+		int opCode = instruction.getOpcode();
+		int funct = instruction.getFunct();
 		
+		if(opCode == 0) {
+			switch (funct){
+			case Constants.ADD_FUNC: ALUResultALU = add(register1Value, register2Value);break;
+			case Constants.SUB_FUNC: ALUResultALU = sub(register1Value, register2Value);break;
+			case Constants.SLL_FUNC: ALUResultALU = shiftLeftLogical(register1Value, register2Value);break;
+			case Constants.SRL_FUNC: ALUResultALU = shiftRightLogical(register1Value, register2Value);break;
+			case Constants.AND_FUNC: ALUResultALU = and(register1Value, register2Value);break;
+			case Constants.OR_FUNC: ALUResultALU = or(register1Value, register2Value);break;
+			case Constants.NOR_FUNC: ALUResultALU = nor(register1Value, register2Value);break;
+			case Constants.SLT_FUNC: ALUResultALU = setLessThan(register1Value, register2Value);break;
+			case Constants.SLTU_FUNC: ALUResultALU = setLessThanUnsigned(register1Value, register2Value);break;
+			default:break;
+			}
+		}
 		
 		
 	}
@@ -114,7 +134,7 @@ public class ALU implements Executable {
 		return first << second;
 	}
 	
-	private int rightLeftLogical(int first, int second) {
+	private int shiftRightLogical(int first, int second) {
 		return first >>> second;
 	}
 	
