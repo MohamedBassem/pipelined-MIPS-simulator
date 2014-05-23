@@ -93,7 +93,7 @@ public class Simulator {
 		return true;
 	}
 	
-	public void run(int origin,String data){
+	public void run(){
 		while(true){
 			if(!step()){
 				break;
