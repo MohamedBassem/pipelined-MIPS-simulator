@@ -3,6 +3,30 @@ package eg.edu.guc.mimps.utils;
 public class Constants {
 
 	/*
+	 * Instructions
+	 */
+	public static final String ADD 	= "add";
+	public static final String SUB 	= "sub";
+	public static final String SLL 	= "sll";
+	public static final String SRL 	= "srl";
+	public static final String AND 	= "and";
+	public static final String OR 	= "or";
+	public static final String NOR 	= "nor";
+	public static final String SLT 	= "slt";
+	public static final String SLTU = "sltu";
+	public static final String ADDI = "addi";
+	public static final String LW 	= "lw";
+	public static final String SW 	= "sw";
+	public static final String ANDI = "andi";
+	public static final String ORI 	= "ori";
+	public static final String BEQ 	= "beq";
+	public static final String BNE 	= "bne";
+	public static final String J 	= "j";
+	public static final String JAL 	= "jal";
+	public static final String JR 	= "jr";
+	
+	
+	/*
 	 * Opcodes
 	 */
 	public static final int ADD_OPCODE 	= 0;
