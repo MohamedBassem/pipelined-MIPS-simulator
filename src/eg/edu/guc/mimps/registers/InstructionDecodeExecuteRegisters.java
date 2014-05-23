@@ -7,7 +7,8 @@ public class InstructionDecodeExecuteRegisters {
 	private int signExtendedOffset;
 	private int rt;
 	private int rd;
-	
+	private int shamt;
+
 	// Execute Phase Signals
 	private boolean aluSrc;
 	private boolean regDest;
@@ -107,6 +108,12 @@ public class InstructionDecodeExecuteRegisters {
 	public void setRd(int rd) {
 		this.rd = rd;
 	}
+	public int getShamt() {
+		return shamt;
+	}
+	public void setShamt(int shamt) {
+		this.shamt = shamt;
+	}
 	
 	
 	public InstructionDecodeExecuteRegisters clone(){
@@ -125,6 +132,7 @@ public class InstructionDecodeExecuteRegisters {
 		clone.setRegWrite(regWrite);
 		clone.setRt(rt);
 		clone.setSignExtendedOffset(signExtendedOffset);
+		clone.setShamt(shamt);
 		return clone;
 	}
 	
@@ -135,6 +143,7 @@ public class InstructionDecodeExecuteRegisters {
 		this.setRegister1Value(instructionDecodeExecuteRegisters.getRegister1Value());
 		this.setRegister2Value(instructionDecodeExecuteRegisters.getRegister2Value());
 		this.setSignExtendedOffset(instructionDecodeExecuteRegisters.getSignExtendedOffset());
+		this.setShamt(instructionDecodeExecuteRegisters.getShamt());
 	}
 	
 	public void replaceControll(InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters){
@@ -147,5 +156,6 @@ public class InstructionDecodeExecuteRegisters {
 		this.setRegDest(instructionDecodeExecuteRegisters.isRegDest());
 		this.setRegWrite(instructionDecodeExecuteRegisters.isRegWrite());
 	}
+	
 
 }
