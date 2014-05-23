@@ -109,7 +109,9 @@ public class GUI {
 				run.setEnabled(false);
 				runStep.setEnabled(false);
 				assemble.setEnabled(true);
-				editor.getHighlighter().removeAllHighlights();		
+				editor.getHighlighter().removeAllHighlights();
+				simulator.reset();
+				update();
 			}
 			
 			@Override
