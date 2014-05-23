@@ -39,7 +39,7 @@ public class Simulator {
 	
 	public Simulator(){
 		this.reset();
-		new GUI(this,memory,registers);
+		gui = new GUI(this,memory,registers);
 	}
 	
 	public void reset(){
