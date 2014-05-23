@@ -7,6 +7,7 @@ import eg.edu.guc.mimps.components.ALU;
 import eg.edu.guc.mimps.components.Controller;
 import eg.edu.guc.mimps.components.DataMemory;
 import eg.edu.guc.mimps.components.RegisterFile;
+import eg.edu.guc.mimps.gui.GUI;
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
@@ -16,22 +17,28 @@ import eg.edu.guc.mimps.registers.Registers;
 
 public class Simulator {
 	
-	InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
-	InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
-	ExecuteMemoryRegisters executeMemoryRegisters;
-	MemoryWritebackRegisters memoryWritebackRegisters;
+	private InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
+	private InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
+	private ExecuteMemoryRegisters executeMemoryRegisters;
+	private MemoryWritebackRegisters memoryWritebackRegisters;
 	
-	Assembler assembler;
-	Controller controller;
-	RegisterFile registerFile;
-	ALU alu;
-	DataMemory dataMemory;
+	private Assembler assembler;
+	private Controller controller;
+	private RegisterFile registerFile;
+	private ALU alu;
+	private DataMemory dataMemory;
 	
-	int pc;
+	private Memory memory;
+	private Registers registers;
+	
+	GUI gui;
+	
+	private int pc;
 	
 	public Simulator(){
 		this.reset();
-		//new GUI(this);
+		// TODO
+		new GUI(this,memory,registers);
 	}
 	
 	public void reset(){
@@ -40,8 +47,8 @@ public class Simulator {
 		executeMemoryRegisters = new ExecuteMemoryRegisters();
 		memoryWritebackRegisters = new MemoryWritebackRegisters();
 		
-		Memory memory = new Memory();
-		Registers registers = new Registers();
+		this.memory = new Memory();
+		this.registers = new Registers();
 		
 		controller = new Controller(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters);
 		registerFile = new RegisterFile(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters,
@@ -50,27 +57,50 @@ public class Simulator {
 		dataMemory = new DataMemory(executeMemoryRegisters,memoryWritebackRegisters,memory);
 	}
 	
+	public boolean assemble(int origin , String code ){
+		this.reset();
+		this.pc = origin;
+		assembler = new Assembler(origin,new StringReader(code),instructionFetchDecodeRegisters);
+		// TODO assembler.assemble()
+		return true;
+	}
+	
+	public boolean step(){
+		if(!assembler.execute(pc)){
+			return false;
+		}
+		registerFile.execute();
+		controller.execute();
+		alu.execute();
+		dataMemory.execute();
+		
+		assembler.write();
+		registerFile.write();
+		controller.write();
+		alu.write();
+		dataMemory.write();
+		
+		gui.update();
+		
+		if(executeMemoryRegisters.isBranch() && !executeMemoryRegisters.isZero()){
+			pc = executeMemoryRegisters.getBranchAddress();
+		}else{
+			pc += 4;
+		}
+		gui.update();
+		return true;
+	}
+	
 	public void run(int origin,String data){
-		assembler = new Assembler(origin,new StringReader(data),instructionFetchDecodeRegisters);
-		pc = origin;
-		while(assembler.execute(pc)){
-			registerFile.execute();
-			controller.execute();
-			alu.execute();
-			dataMemory.execute();
-			
-			assembler.write();
-			registerFile.write();
-			controller.write();
-			alu.write();
-			dataMemory.write();
-			
-			if(executeMemoryRegisters.isBranch() && !executeMemoryRegisters.isZero()){
-				pc = executeMemoryRegisters.getBranchAddress();
-			}else{
-				pc += 4;
+		while(true){
+			if(!step()){
+				break;
 			}
 		}
+	}
+	
+	public int getPc(){
+		return this.pc;
 	}
 	
 	public static void main(String[] args) {
