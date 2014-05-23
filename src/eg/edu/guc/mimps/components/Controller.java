@@ -13,7 +13,7 @@ public class Controller implements Executable {
 	String storeControls = "X10010X";
 	String branchControls = "X01000X";
 	String control;
-	int aluOp; 
+	int aluOp;
 
 	public InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
 	public InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
@@ -31,7 +31,7 @@ public class Controller implements Executable {
 		int instructionNumber = instructionFetchDecodeRegisters
 				.getInstruction();
 		Instruction instruction = new Instruction(instructionNumber);
-		aluOp=this.toInstructionType(instruction.getOpcode());
+		aluOp = this.toInstructionType(instruction.getOpcode());
 
 	}
 
@@ -61,47 +61,46 @@ public class Controller implements Executable {
 		return false;
 	}
 
-	public int toInstructionType(int opCode) { 
+	public int toInstructionType(int opCode) {
 		switch (opCode) {
 		case Constants.ADD_OPCODE:
-			control =rformatControls; 
-			aluOp = 2; 
+			control = rformatControls;
+			aluOp = 2;
 			break;
 		case Constants.ADDI_OPCODE:
-			control=iformatControls; 
-			aluOp=5; 
-			break;	
+			control = iformatControls;
+			aluOp = 5;
+			break;
 		case Constants.ORI_OPCODE:
-			control=iformatControls; 
-			aluOp=7; 
+			control = iformatControls;
+			aluOp = 7;
 			break;
 		case Constants.ANDI_OPCODE:
-			control=iformatControls; 
-			aluOp=6; 
-			break;		
+			control = iformatControls;
+			aluOp = 6;
+			break;
 		case Constants.SW_OPCODE:
 			control = storeControls;
-			aluOp=0; 
+			aluOp = 0;
 			break;
 		case Constants.LW_OPCODE:
 			control = loadControls;
-			aluOp=0; 
+			aluOp = 0;
 			break;
 		case Constants.BEQ_OPCODE:
 			control = branchControls;
-			aluOp = 1; 
-			break; 
+			aluOp = 1;
+			break;
 		case Constants.BNE_OPCODE:
 			control = branchControls;
-			aluOp=4; 
+			aluOp = 4;
 			break;
 		case Constants.J_OPCODE:
 		case Constants.JAL_OPCODE:
-			control =jformatControls; 
-			aluOp=3; 
+			control = jformatControls;
+			aluOp = 3;
 			break;
-
 		}
-		return aluOp; 
+		return aluOp;
 	}
 }
