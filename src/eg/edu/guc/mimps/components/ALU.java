@@ -56,7 +56,7 @@ public class ALU implements Executable {
 				}
 				break;
 			// Jump
-			case 3: //TODO
+			case 3: // DO NOTHING
 				break;
 			// BNE
 			case 4: aluOperation = SUB; break;
