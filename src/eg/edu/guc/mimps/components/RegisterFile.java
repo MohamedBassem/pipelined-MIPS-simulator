@@ -41,22 +41,24 @@ public class RegisterFile implements Executable {
 		int rs = instruction.getRs();
 		int rt = instruction.getRt();
 
+		int constant = instruction.getConstant();
+		newIDER.setSignExtendedOffset(signExtend(constant));
+		
 		newIDER.setRegister1Value(registers.getReg(rs));
 		newIDER.setRegister2Value(registers.getReg(rt));
 		
 		if(instructionDecodeExecuteRegisters.isRegWrite()) {
 			int data = memoryWritebackRegisters.getALUResult();
 			int writeTo = memoryWritebackRegisters.getWriteBackRegister();
+			if(writeTo == 0)
+				return;
 			if(instructionDecodeExecuteRegisters.isMemToReg()) {
 				data = memoryWritebackRegisters.getMemoryWord();
 				registers.setReg(writeTo, data);
 			}else {
 				registers.setReg(writeTo, data);
 			}
-		}
-		
-		int constant = instruction.getConstant();
-		newIDER.setSignExtendedOffset(signExtend(constant));
+		}	
 	}
 
 	@Override
