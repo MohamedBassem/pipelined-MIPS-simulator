@@ -3,6 +3,9 @@ package eg.edu.guc.mimps.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,6 +16,9 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Document;
+
+import com.sun.org.apache.xerces.internal.impl.dv.ValidatedInfo;
 
 public class GUI {
 
@@ -70,6 +76,27 @@ public class GUI {
 
 	private JScrollPane getEditor() {
 		JTextPane editor = new JTextPane();
+		editor.addKeyListener
+		(
+		new KeyListener()
+		{
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+		}
+		);
 		TextLineNumber tln = new TextLineNumber(editor);
 		JScrollPane scroll = new JScrollPane(editor);
 		scroll.setRowHeaderView(tln);
@@ -79,7 +106,7 @@ public class GUI {
 		scroll.setMinimumSize(new Dimension(700, 400));
 		return scroll;
 	}
-
+	
 	public JScrollPane getRegistersTable() {
 		String[] names = { "Register", "Number", "Value" };
 		String[] registers = { "$zero", "$at", "$v0", "$v1", "$a0", "$a1",
