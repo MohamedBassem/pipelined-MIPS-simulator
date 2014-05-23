@@ -1,8 +1,6 @@
 package eg.edu.guc.mimps.components;
 
-import com.sun.media.sound.AlawCodec;
 
-import eg.edu.guc.mimps.assembler.Assembler;
 import eg.edu.guc.mimps.assembler.Instruction;
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
@@ -10,23 +8,6 @@ import eg.edu.guc.mimps.utils.BinaryManiplator;
 import eg.edu.guc.mimps.utils.Constants;
 
 public class ALU implements Executable {
-	
-	private int branchAddressALU;
-	private boolean zeroALU;
-	private int ALUResultALU;
-	private int registerValueToMemoryALU;
-	private int writeBackRegisterALU;
-
-	// Memory Phase Signals
-	private boolean memReadALU;
-	private boolean memWriteALU;
-	private boolean branchALU;
-
-	// Write Back Signals
-	private boolean regWriteALU;
-	private boolean memToRegALU;
-
-
 	InstructionDecodeExecuteRegisters decodeExecuteRegister;
 	ExecuteMemoryRegisters executeMemoryRegister;
 	ExecuteMemoryRegisters newExecuteMemoryRegister;
@@ -37,31 +18,17 @@ public class ALU implements Executable {
 			ExecuteMemoryRegisters executeMemoryRegisters, Instruction instruction) {
 			decodeExecuteRegister = instructionDecodeExecuteRegisters;
 			executeMemoryRegister = executeMemoryRegisters;
-			this.instruction = instruction;
 	}
 
 
 	public void execute() {
 		newExecuteMemoryRegister = executeMemoryRegister.clone();
-		int incrementedPc = decodeExecuteRegister.getIncrementedPc();
+		int ALUResultALU = 0;
+		boolean zeroALU = false;
 		int register1Value = decodeExecuteRegister.getRegister1Value();
 		int register2Value = decodeExecuteRegister.getRegister2Value();
 		int signExtendedOffset = decodeExecuteRegister.getSignExtendedOffset();
-		int rt = decodeExecuteRegister.getRt();
-		int rd = decodeExecuteRegister.getRd();
-
-		boolean aluSrc = decodeExecuteRegister.isAluSrc();
-		boolean regDest = decodeExecuteRegister.isRegDest();
-		int aluOpt = decodeExecuteRegister.getAluOpt();
-
-		boolean memRead = decodeExecuteRegister.isMemRead();
-		boolean memWrite = decodeExecuteRegister.isMemWrite();
-		boolean branch = decodeExecuteRegister.isBranch();
-
-		boolean regWrite = decodeExecuteRegister.isRegWrite();
-		boolean memToReg = decodeExecuteRegister.isMemToReg();
-		
-		int opCode = instruction.getOpcode();
+		int opCode = decodeExecuteRegister.getAluOpt();
 		int funct = instruction.getFunct();
 		
 		if(opCode == 0) {
@@ -89,18 +56,9 @@ public class ALU implements Executable {
 			default:break;
 			}
 		}
-		newExecuteMemoryRegister.setBranchAddress(branchAddressALU);
 		newExecuteMemoryRegister.setZero(zeroALU);
 		newExecuteMemoryRegister.setALUResult(ALUResultALU);
-		newExecuteMemoryRegister.setRegisterValueToMemory(registerValueToMemoryALU);
-		newExecuteMemoryRegister.setWriteBackRegister(writeBackRegisterALU);
-		newExecuteMemoryRegister.setMemRead(memReadALU);
-		newExecuteMemoryRegister.setMemWrite(memWriteALU);
-		newExecuteMemoryRegister.setBranch(branchALU);
-		newExecuteMemoryRegister.setRegWrite(regWriteALU);
-		newExecuteMemoryRegister.setMemToReg(memToRegALU);
-		
-	}
+			}
 
 	
 	public void write() {
