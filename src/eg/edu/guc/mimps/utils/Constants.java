@@ -48,7 +48,7 @@ public class Constants {
 	public static final int BNE_OPCODE 	= 0x05;
 	public static final int J_OPCODE 	= 0x02;
 	public static final int JAL_OPCODE 	= 0x03;
-	
+
 		
 	/*
 	 * Func
