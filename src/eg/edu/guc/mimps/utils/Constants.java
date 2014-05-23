@@ -47,7 +47,7 @@ public class Constants {
 	public static final int BNE_OPCODE 	= 7;
 	public static final int J_OPCODE 	= 8;
 	public static final int JAL_OPCODE 	= 9;
-	public static final int JR_OPCODE 	= 10;
+	public static final int JR_OPCODE 	= 0;
 		
 	/*
 	 * Func
@@ -61,6 +61,7 @@ public class Constants {
 	public static final int NOR_FUNC 	= 6;
 	public static final int SLT_FUNC 	= 7;
 	public static final int SLTU_FUNC 	= 8;
+	public static final int JR_FUNC 	= 9;
 	
 	
 }

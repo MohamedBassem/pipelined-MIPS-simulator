@@ -9,7 +9,7 @@ public class SyntaxErrorException extends Exception {
 	private int line;
 	
 	public SyntaxErrorException(int line) {
-		super("Syntax error");
+		super("Syntax error " + line);
 		this.line = line;
 	}
 	

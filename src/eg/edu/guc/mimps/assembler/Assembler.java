@@ -175,9 +175,14 @@ public class Assembler {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 			if (matcher.find()) {
-				result = decodeJInstrution(matcher.group(1), matcher.group(2), line);
+				result = decodeJInstruction(matcher.group(1), matcher.group(2), line);
 			}
-		} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ,]+) *,? *\\$([^ ,]+) *,? *([0-9]+)"))) {
+		} else if (instruction.matches((pattern = "([^ ,]+) *([^ ]+)"))) {
+			pat = Pattern.compile(pattern);
+			matcher = pat.matcher(instruction);
+			if (matcher.find()) {
+				result = decodeRInstruction(matcher.group(1), 0, getRegisterNumber(matcher.group(2), line), 0, 0, line);
+			}	
 			
 		} else {
 			throw new SyntaxErrorException(line);
@@ -188,9 +193,9 @@ public class Assembler {
 	/*
 	 * name(6 bits) LABEL (26 bits)
 	 */
-	private Instruction decodeJInstrution(String name, String label, int line) throws SyntaxErrorException {
+	private Instruction decodeJInstruction(String name, String label, int line) throws SyntaxErrorException {
 		
-		if (!types.get(name).equals("J")) {
+		if (!types.containsKey(name) || !types.get(name).equals("J")) {
 			throw new SyntaxErrorException("Invalid instruction", line);
 		}
 		if (!labels.containsKey(label)) {
@@ -205,7 +210,7 @@ public class Assembler {
 
 	private Instruction decodeRInstruction(String name, int rd, int rs, int rt, int shamt, int line) throws SyntaxErrorException{
 		
-		if (!types.get(name).equals("R")) {
+		if (!types.containsKey(name) || !types.get(name).equals("R")) {
 			throw new SyntaxErrorException("Invalid instruction", line);
 		}
 		Instruction instruction = new Instruction();
@@ -219,9 +224,19 @@ public class Assembler {
 		
 	}
 	
-	private Instruction decodeIInstruction(String name, int rt, int rs, int address, int line) {
+	private Instruction decodeIInstruction(String name, int rt, int rs, int address, int line) throws SyntaxErrorException {
 		
-		return null;
+		if (!types.containsKey(name) || !types.get(name).equals("I")) {
+			throw new SyntaxErrorException("Invalid instruction", line);
+		}
+		Instruction instruction = new Instruction();
+		instruction.setOpcode(opcodes.get(name));
+		instruction.setRt(rt);
+		instruction.setRs(rs);
+		instruction.setConstant(address);
+		
+		
+		return instruction;
 	}
 	
 	
@@ -344,6 +359,7 @@ public class Assembler {
 		functionCodes.put(Constants.SRL, Constants.SRL_FUNC);
 		functionCodes.put(Constants.SLTU, Constants.SLTU_FUNC);
 		functionCodes.put(Constants.SLT, Constants.SLT_FUNC);
+		functionCodes.put(Constants.JR, Constants.JR_FUNC);
 	}
 
 }
