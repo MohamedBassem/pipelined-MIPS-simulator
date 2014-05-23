@@ -6,17 +6,16 @@ import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
 import eg.edu.guc.mimps.utils.Constants;
 
 public class Controller implements Executable {
-	String rformatControls = "1000010";
-	String iformatControls = "0100010";
-	String jformatControls = "XXXXXXX";
-	String loadControls = "0101011";
-	String storeControls = "X10010X";
-	String branchControls = "X01000X";
-	String control;
-	int aluOp;
-
-	public InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
-	public InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
+	private InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
+	private InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
+	private String rformatControls = "1000010";
+	private String iformatControls = "0100010";
+	private String jformatControls = "XXXXXXX";
+	private String loadControls = "0101011";
+	private String storeControls = "X10010X";
+	private String branchControls = "X01000X";
+	private String control;
+	private int aluOp;
 
 	public Controller(
 			InstructionFetchDecodeRegisters instructionFetchDecodeRegisters,
