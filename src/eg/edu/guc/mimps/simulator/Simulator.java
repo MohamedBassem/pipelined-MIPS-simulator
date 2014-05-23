@@ -28,6 +28,9 @@ public class Simulator {
 	private ALU alu;
 	private DataMemory dataMemory;
 	
+	private Memory memory;
+	private Registers registers;
+	
 	GUI gui;
 	
 	private int pc;
@@ -35,7 +38,7 @@ public class Simulator {
 	public Simulator(){
 		this.reset();
 		// TODO
-		//new GUI(this);
+		new GUI(this,memory,registers);
 	}
 	
 	public void reset(){
@@ -44,8 +47,8 @@ public class Simulator {
 		executeMemoryRegisters = new ExecuteMemoryRegisters();
 		memoryWritebackRegisters = new MemoryWritebackRegisters();
 		
-		Memory memory = new Memory();
-		Registers registers = new Registers();
+		this.memory = new Memory();
+		this.registers = new Registers();
 		
 		controller = new Controller(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters);
 		registerFile = new RegisterFile(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters,
