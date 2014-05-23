@@ -66,7 +66,7 @@ public class Assembler {
 		return true;
 	}
 	
-	public void assemble() throws SyntaxErrorException, IOException{
+	public void assemble() throws SyntaxErrorException{
 		LinkedList<String> pureInstructions = firstPass();
 		encodeInstructions(pureInstructions);
 		
