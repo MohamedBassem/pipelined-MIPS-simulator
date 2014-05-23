@@ -121,9 +121,7 @@ public class GUI {
 								editor.getDocument().getDefaultRootElement()
 										.getElement(e1.getLine() - 1)
 										.getStartOffset(),
-								editor.getDocument().getDefaultRootElement()
-										.getElement(e1.getLine())
-										.getStartOffset(),
+								editor.getDocument().getDefaultRootElement().getElement(e1.getLine() - 1).getEndOffset(),
 								new DefaultHighlighter.DefaultHighlightPainter(
 										Color.red));
 					} catch (BadLocationException e2) {
