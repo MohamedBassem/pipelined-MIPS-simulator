@@ -69,7 +69,7 @@ public class Instruction {
 	}
 	
 	protected void setConstant(int value) {
-		BinaryManiplator.setPartialValue(instruction, 0, 15, value);
+		instruction = BinaryManiplator.setPartialValue(instruction, 0, 15, value);
 	}
 	
 	public int getJumpAddress() {
@@ -77,7 +77,7 @@ public class Instruction {
 	}
 	
 	protected void setJumpAddress(int jumpAddress) {
-		BinaryManiplator.setPartialValue(instruction, 0, 25, jumpAddress);
+		instruction = BinaryManiplator.setPartialValue(instruction, 0, 25, jumpAddress);
 		
 	}
 	
