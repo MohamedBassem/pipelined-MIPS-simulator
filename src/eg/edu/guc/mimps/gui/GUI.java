@@ -268,15 +268,5 @@ public class GUI {
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
 	}
 
-	public static void main(String[] args) {
-		Registers registers = new Registers();
-		Memory memory = new Memory();
-		Simulator simulator = new Simulator();
-
-		GUI gui = new GUI(simulator, memory, registers);
-		gui.startFrame();
-		gui.update();
-
-	}
 
 }
