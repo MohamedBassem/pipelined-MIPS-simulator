@@ -39,7 +39,6 @@ public class Simulator {
 	
 	public Simulator(){
 		this.reset();
-		// TODO
 		new GUI(this,memory,registers);
 	}
 	
