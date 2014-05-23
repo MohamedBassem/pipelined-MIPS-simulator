@@ -36,6 +36,20 @@ public class RegisterFile implements Executable {
 		return val;
 	}
 	
+	public static void main(String[]ar) {
+		int m = Integer.valueOf("10101", 2);
+		int n = Integer.valueOf("10000000000", 2);
+		int i = 2;
+		int j = 6;
+		while(i <= j) {
+			int mask = (1 << 0) & m;
+			n |= (mask << i);
+			i++;
+			m >>= 1;
+		}
+		System.out.println(Integer.toBinaryString(n));
+	}
+	
 	@Override
 	public void execute() {
 		newIDER = instructionDecodeExecuteRegisters.clone();
@@ -56,6 +70,10 @@ public class RegisterFile implements Executable {
 			newIDER.setRegister1Value(registers.getReg(rs));
 			if(regDest)
 				newIDER.setRegister2Value(registers.getReg(rt));
+			else
+				newIDER.setRegister2Value(registers.getReg(rd));
+//			TODO check the reading
+//			TODO change regwrite and writereg
 		}
 		int sign = instructionDecodeExecuteRegisters.getSignExtendedOffset();
 		newIDER.setSignExtendedOffset(signExtend(sign));
