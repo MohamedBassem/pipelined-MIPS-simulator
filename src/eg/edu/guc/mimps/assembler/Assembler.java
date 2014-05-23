@@ -125,13 +125,13 @@ public class Assembler {
 		int cursor = origin;
 		for (String instruction : sourceCode) {
 
-			Instruction encoded = encodeInstruction(instruction, originalLine.get(cursor)); 
+			Instruction encoded = encodeInstruction(instruction, originalLine.get(cursor), cursor); 
 			instructions.put(cursor, encoded);
 			cursor += wordSize;
 		}
 	}
 	
-	private Instruction encodeInstruction(String instruction, int line) throws SyntaxErrorException{
+	private Instruction encodeInstruction(String instruction, int line, int cursor) throws SyntaxErrorException{
 		String pattern;
 		Matcher matcher;
 		Pattern pat;
@@ -168,7 +168,8 @@ public class Assembler {
 				if (!labels.containsKey(matcher.group(4))) {
 					throw new SyntaxErrorException("Cannot match any label + " + matcher.group(4), line);
 				}
-				result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line),  getRegisterNumber(matcher.group(3), line), labels.get(matcher.group(4)), line);
+				int relativeAddress = (cursor - labels.get(matcher.group(4))) / 4;
+				result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line),  getRegisterNumber(matcher.group(3), line), relativeAddress, line);
 			}
 			
 		} else if (instruction.matches((pattern = "([^ ,]+) *([^ ]+)"))) {
