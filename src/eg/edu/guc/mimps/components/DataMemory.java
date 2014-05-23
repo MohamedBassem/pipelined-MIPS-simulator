@@ -3,6 +3,7 @@ package eg.edu.guc.mimps.components;
 import java.util.HashMap;
 
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
+import eg.edu.guc.mimps.registers.Memory;
 import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
 
 public class DataMemory implements Executable {
@@ -10,31 +11,28 @@ public class DataMemory implements Executable {
 	ExecuteMemoryRegisters executeMemoryRegisters;
 	MemoryWritebackRegisters memoryWritebackRegisters;
 	
-	HashMap<Integer,Integer> memory;
+	Memory memory;
 	
-	// MemoryWritebackRegisters
-	private int ALUResult;
-	private int memoryWord;
-	private int writeBackRegister;
-	
-	// Write Back Signals
-	private boolean regWrite;
-	private boolean memToReg;
+	MemoryWritebackRegisters newMemoryWritebackRegisters;
 
-	public DataMemory(ExecuteMemoryRegisters executeMemoryRegisters2,
-			MemoryWritebackRegisters memoryWritebackRegisters2) {
-		// TODO Auto-generated constructor stub
+	public DataMemory(ExecuteMemoryRegisters executeMemoryRegisters,
+			MemoryWritebackRegisters memoryWritebackRegisters,
+			Memory memory) {
+		this.executeMemoryRegisters = executeMemoryRegisters;
+		this.memoryWritebackRegisters = memoryWritebackRegisters;
+		this.memory = memory;
 	}
 
 	@Override
 	public void execute() {
-		ALUResult = executeMemoryRegisters.getALUResult();
-		writeBackRegister = executeMemoryRegisters.getWriteBackRegister();
-		regWrite = executeMemoryRegisters.isRegWrite();
-		memToReg = executeMemoryRegisters.isMemToReg();
+		newMemoryWritebackRegisters = memoryWritebackRegisters.clone(); 
+		newMemoryWritebackRegisters.setALUResult(executeMemoryRegisters.getALUResult());
+		newMemoryWritebackRegisters.setWriteBackRegister(executeMemoryRegisters.getWriteBackRegister());
+		newMemoryWritebackRegisters.setRegWrite(executeMemoryRegisters.isRegWrite());
+		newMemoryWritebackRegisters.setMemToReg(executeMemoryRegisters.isMemToReg());
 		
 		if(executeMemoryRegisters.isMemRead()){
-			memoryWord = memory.get(executeMemoryRegisters.getALUResult());
+			newMemoryWritebackRegisters.setMemoryWord(memory.get(executeMemoryRegisters.getALUResult()));
 		}
 		
 		if(executeMemoryRegisters.isMemWrite()){
@@ -45,11 +43,7 @@ public class DataMemory implements Executable {
 
 	@Override
 	public void write() {
-		memoryWritebackRegisters.setALUResult(ALUResult);
-		memoryWritebackRegisters.setMemoryWord(memoryWord);
-		memoryWritebackRegisters.setMemToReg(memToReg);
-		memoryWritebackRegisters.setRegWrite(regWrite);
-		memoryWritebackRegisters.setWriteBackRegister(writeBackRegister);
+		memoryWritebackRegisters.replace(newMemoryWritebackRegisters);
 	}
 
 }
