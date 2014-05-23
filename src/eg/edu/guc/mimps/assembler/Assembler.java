@@ -141,23 +141,34 @@ public class Assembler {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 			if (matcher.find()) {
-				result = decodeRInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line), getRegisterNumber(matcher.group(3), line), getRegisterNumber(matcher.group(4), line), 0, line);
+				if (types.containsKey(matcher.group(1)) && types.get(matcher.group(1)).equals("R")) {
+					result = decodeRInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line), getRegisterNumber(matcher.group(3), line), getRegisterNumber(matcher.group(4), line), 0, line);
+				} else {
+					throw new SyntaxErrorException("Invalid instruction", line);					
+				}
 			}
-		} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ,]+) *,? *\\$([^ ,]+) *,? *\\$([^ ,]+)"))) {
+		} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ,]+) *,? *([0-9]+)\\( *\\$([^ ]+) *\\)"))) {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 			if (matcher.find()) {
-				result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line), getRegisterNumber(matcher.group(4), line), Integer.parseInt(matcher.group(3)), line);
+				if (types.containsKey(matcher.group(1)) && types.get(matcher.group(1)).equals("I_MEMORY")) {
+					result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line), getRegisterNumber(matcher.group(4), line), Integer.parseInt(matcher.group(3)), line);		
+				} else {
+					throw new SyntaxErrorException("Invalid instruction", line);					
+				}
 			}
 			
 		} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ,]+) *,? *\\$([^ ,]+) *,? *([0-9]+)"))) {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 			if (matcher.find()) {
-				try {
+				if (types.containsKey(matcher.group(1)) && types.get(matcher.group(1)).equals("I")) {
 					result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line), getRegisterNumber(matcher.group(3), line), Integer.parseInt(matcher.group(4)), line);
-				} catch (SyntaxErrorException ex) {
+				} else if (types.containsKey(matcher.group(1)) && types.get(matcher.group(1)).equals("R_SHIFT")){
 					result = decodeRInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line), getRegisterNumber(matcher.group(3), line), 0, Integer.parseInt(matcher.group(4)), line);
+					
+				} else {
+					throw new SyntaxErrorException("Invalid instruction", line);					
 				}
 			}
 			
@@ -165,24 +176,36 @@ public class Assembler {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 			if (matcher.find()) {
-				if (!labels.containsKey(matcher.group(4))) {
-					throw new SyntaxErrorException("Cannot match any label + " + matcher.group(4), line);
+				if (types.containsKey(matcher.group(1)) && types.get(matcher.group(1)).equals("I_BRANCH")) {
+					if (!labels.containsKey(matcher.group(4))) {
+						throw new SyntaxErrorException("Cannot match any label " + matcher.group(4), line);
+					}
+					int relativeAddress = (cursor - labels.get(matcher.group(4))) / 4;
+					result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line),  getRegisterNumber(matcher.group(3), line), relativeAddress, line);
+				} else {
+					throw new SyntaxErrorException("Invalid instruction", line);
 				}
-				int relativeAddress = (cursor - labels.get(matcher.group(4))) / 4;
-				result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line),  getRegisterNumber(matcher.group(3), line), relativeAddress, line);
 			}
 			
 		} else if (instruction.matches((pattern = "([^ ,]+) *([^ ]+)"))) {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 			if (matcher.find()) {
-				result = decodeJInstruction(matcher.group(1), matcher.group(2), line);
+				if (types.containsKey(matcher.group(1)) && types.get(matcher.group(1)).equals("J")) {
+					result = decodeJInstruction(matcher.group(1), matcher.group(2), line);
+				} else {
+					throw new SyntaxErrorException("Invalid instruction + " + matcher.group(4), line);
+				}
 			}
-		} else if (instruction.matches((pattern = "([^ ,]+) *([^ ]+)"))) {
+		} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ]+)"))) {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
 			if (matcher.find()) {
-				result = decodeRInstruction(matcher.group(1), 0, getRegisterNumber(matcher.group(2), line), 0, 0, line);
+				if (types.containsKey(matcher.group(1)) && types.get(matcher.group(1)).equals("R_JUMP")) {
+					result = decodeRInstruction(matcher.group(1), 0, getRegisterNumber(matcher.group(2), line), 0, 0, line);
+				} else {
+					throw new SyntaxErrorException("Invalid instruction", line);
+				}
 			}	
 			
 		} else {
@@ -196,9 +219,6 @@ public class Assembler {
 	 */
 	private Instruction decodeJInstruction(String name, String label, int line) throws SyntaxErrorException {
 		
-		if (!types.containsKey(name) || !types.get(name).equals("J")) {
-			throw new SyntaxErrorException("Invalid instruction", line);
-		}
 		if (!labels.containsKey(label)) {
 			throw new SyntaxErrorException("No label matches " + label, line);
 		}
@@ -211,9 +231,6 @@ public class Assembler {
 
 	private Instruction decodeRInstruction(String name, int rd, int rs, int rt, int shamt, int line) throws SyntaxErrorException{
 		
-		if (!types.containsKey(name) || !types.get(name).equals("R")) {
-			throw new SyntaxErrorException("Invalid instruction", line);
-		}
 		Instruction instruction = new Instruction();
 		instruction.setOpcode(opcodes.get(name));
 		instruction.setRd(rd);
@@ -227,9 +244,6 @@ public class Assembler {
 	
 	private Instruction decodeIInstruction(String name, int rt, int rs, int address, int line) throws SyntaxErrorException {
 		
-		if (!types.containsKey(name) || !types.get(name).equals("I")) {
-			throw new SyntaxErrorException("Invalid instruction", line);
-		}
 		Instruction instruction = new Instruction();
 		instruction.setOpcode(opcodes.get(name));
 		instruction.setRt(rt);
@@ -297,17 +311,17 @@ public class Assembler {
 		types.put(Constants.NOR, "R");
 		types.put(Constants.SLT, "R");
 		types.put(Constants.SLTU, "R");
-		types.put(Constants.LW, "I");
-		types.put(Constants.SW, "I");
+		types.put(Constants.LW, "I_MEMORY");
+		types.put(Constants.SW, "I_MEMORY");
 		types.put(Constants.ADDI, "I");
 		types.put(Constants.ANDI, "I");
 		types.put(Constants.ORI, "I");
-		types.put(Constants.SLL, "I");
-		types.put(Constants.SRL, "I");
-		types.put(Constants.BEQ, "I");
-		types.put(Constants.BNE, "I");
+		types.put(Constants.SLL, "R_SHIFT");
+		types.put(Constants.SRL, "R_SHIFT");
+		types.put(Constants.BEQ, "I_BRANCH");
+		types.put(Constants.BNE, "I_BRANCH");
 		types.put(Constants.J, "J");
-		types.put(Constants.JAL, "R");
+		types.put(Constants.JAL, "R_JUMP");
 	}
 	
 	private void initRegisters() {
