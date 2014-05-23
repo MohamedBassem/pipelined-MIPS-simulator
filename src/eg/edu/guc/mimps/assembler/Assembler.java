@@ -33,7 +33,8 @@ public class Assembler {
 	private Reader sourceCode;
 	private static final int wordSize = 4;
 	private Instruction currentInstruction;
-	private InstructionFetchDecodeRegisters pipleLine;
+	private InstructionFetchDecodeRegisters pipeLine;
+	private int pc;
 	
 	
 	public static void main(String[] args) throws SyntaxErrorException, IOException {
@@ -46,7 +47,7 @@ public class Assembler {
 	public Assembler(int origin, Reader sourceCode, InstructionFetchDecodeRegisters instructionFetchDecodeRegisters) {
 		this.origin = origin;
 		this.sourceCode = sourceCode;
-		this.pipleLine = instructionFetchDecodeRegisters;
+		this.pipeLine = instructionFetchDecodeRegisters;
 		init();
 	
 	}
@@ -64,6 +65,7 @@ public class Assembler {
 		if (!instructions.containsKey(pc)) {
 			return false;
 		}
+		this.pc = pc;
 		currentInstruction = instructions.get(pc);
 		return true;
 	}
@@ -279,7 +281,8 @@ public class Assembler {
 	}
 	
 	public void write(){
-		pipleLine.setInstruction(currentInstruction.toInt());
+		pipeLine.setInstruction(currentInstruction.toInt());
+		pipeLine.setIncrementedPc(pc+4);
 	}
 	
 
