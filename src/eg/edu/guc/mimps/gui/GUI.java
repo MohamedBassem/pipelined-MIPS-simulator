@@ -41,7 +41,7 @@ public class GUI {
 	JTable memoryTable;
 	JTextPane editor = new JTextPane();
 	JMenuBar mb;
-	String code = "lalal";
+	String code = "";
 
 	public GUI(Simulator simulator, Memory memory, Registers registers) {
 		this.simulator = simulator;
@@ -106,6 +106,25 @@ public class GUI {
 		if(code == "")
 			assemble.setEnabled(false);
 		
+		editor.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				run.setEnabled(false);
+				runStep.setEnabled(false);
+				assemble.setEnabled(true);
+				editor.getHighlighter().removeAllHighlights();		
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+			}
+		});
+		
 		assemble.addActionListener(new ActionListener() {
 
 			@Override
@@ -133,25 +152,6 @@ public class GUI {
 					}
 
 				} 
-				
-				editor.addKeyListener(new KeyListener() {
-					
-					@Override
-					public void keyTyped(KeyEvent arg0) {
-						run.setEnabled(false);
-						runStep.setEnabled(false);
-						assemble.setEnabled(true);
-						editor.getHighlighter().removeAllHighlights();		
-					}
-					
-					@Override
-					public void keyReleased(KeyEvent arg0) {
-					}
-					
-					@Override
-					public void keyPressed(KeyEvent arg0) {
-					}
-				});
 			}
 		}); 
 
