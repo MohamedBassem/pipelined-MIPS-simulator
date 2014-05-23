@@ -27,36 +27,39 @@ public class ALU implements Executable {
 	private boolean memToRegALU;
 
 
-	InstructionDecodeExecuteRegisters prevRegister;
-	ExecuteMemoryRegisters nextRegister;
+	InstructionDecodeExecuteRegisters decodeExecuteRegister;
+	ExecuteMemoryRegisters executeMemoryRegister;
+	ExecuteMemoryRegisters newExecuteMemoryRegister;
 	Instruction instruction;
 	
 	public ALU(
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
-			ExecuteMemoryRegisters executeMemoryRegisters) {
-			prevRegister = instructionDecodeExecuteRegisters;
-			nextRegister = executeMemoryRegisters;
+			ExecuteMemoryRegisters executeMemoryRegisters, Instruction instruction) {
+			decodeExecuteRegister = instructionDecodeExecuteRegisters;
+			executeMemoryRegister = executeMemoryRegisters;
+			this.instruction = instruction;
 	}
 
 
 	public void execute() {
-		int incrementedPc = prevRegister.getIncrementedPc();
-		int register1Value = prevRegister.getRegister1Value();
-		int register2Value = prevRegister.getRegister2Value();
-		int signExtendedOffset = prevRegister.getSignExtendedOffset();
-		int rt = prevRegister.getRt();
-		int rd = prevRegister.getRd();
+		newExecuteMemoryRegister = executeMemoryRegister.clone();
+		int incrementedPc = decodeExecuteRegister.getIncrementedPc();
+		int register1Value = decodeExecuteRegister.getRegister1Value();
+		int register2Value = decodeExecuteRegister.getRegister2Value();
+		int signExtendedOffset = decodeExecuteRegister.getSignExtendedOffset();
+		int rt = decodeExecuteRegister.getRt();
+		int rd = decodeExecuteRegister.getRd();
 
-		boolean aluSrc = prevRegister.isAluSrc();
-		boolean regDest = prevRegister.isRegDest();
-		int aluOpt = prevRegister.getAluOpt();
+		boolean aluSrc = decodeExecuteRegister.isAluSrc();
+		boolean regDest = decodeExecuteRegister.isRegDest();
+		int aluOpt = decodeExecuteRegister.getAluOpt();
 
-		boolean memRead = prevRegister.isMemRead();
-		boolean memWrite = prevRegister.isMemWrite();
-		boolean branch = prevRegister.isBranch();
+		boolean memRead = decodeExecuteRegister.isMemRead();
+		boolean memWrite = decodeExecuteRegister.isMemWrite();
+		boolean branch = decodeExecuteRegister.isBranch();
 
-		boolean regWrite = prevRegister.isRegWrite();
-		boolean memToReg = prevRegister.isMemToReg();
+		boolean regWrite = decodeExecuteRegister.isRegWrite();
+		boolean memToReg = decodeExecuteRegister.isMemToReg();
 		
 		int opCode = instruction.getOpcode();
 		int funct = instruction.getFunct();
@@ -81,27 +84,27 @@ public class ALU implements Executable {
 			case Constants.LW_OPCODE: ALUResultALU = add(register1Value, signExtendedOffset);break;
 			case Constants.ANDI_OPCODE: ALUResultALU = and(register1Value, signExtendedOffset);break;
 			case Constants.ORI_OPCODE: ALUResultALU = or(register1Value, signExtendedOffset);break;
-			case Constants.BEQ_OPCODE: ALUResultALU = branchIfEqual(register1Value, register2Value);break;
-			case Constants.BNE_OPCODE: ALUResultALU = branchIfNotEqual(register1Value, register2Value);break;
+			case Constants.BEQ_OPCODE: zeroALU = branchIfEqual(register1Value, register2Value);break;
+			case Constants.BNE_OPCODE: zeroALU = branchIfNotEqual(register1Value, register2Value);break;
 			default:break;
 			}
 		}
-		
+		newExecuteMemoryRegister.setBranchAddress(branchAddressALU);
+		newExecuteMemoryRegister.setZero(zeroALU);
+		newExecuteMemoryRegister.setALUResult(ALUResultALU);
+		newExecuteMemoryRegister.setRegisterValueToMemory(registerValueToMemoryALU);
+		newExecuteMemoryRegister.setWriteBackRegister(writeBackRegisterALU);
+		newExecuteMemoryRegister.setMemRead(memReadALU);
+		newExecuteMemoryRegister.setMemWrite(memWriteALU);
+		newExecuteMemoryRegister.setBranch(branchALU);
+		newExecuteMemoryRegister.setRegWrite(regWriteALU);
+		newExecuteMemoryRegister.setMemToReg(memToRegALU);
 		
 	}
 
 	
 	public void write() {
-		nextRegister.setBranchAddress(branchAddressALU);
-		nextRegister.setZero(zeroALU);
-		nextRegister.setALUResult(ALUResultALU);
-		nextRegister.setRegisterValueToMemory(registerValueToMemoryALU);
-		nextRegister.setWriteBackRegister(writeBackRegisterALU);
-		nextRegister.setMemRead(memReadALU);
-		nextRegister.setMemWrite(memWriteALU);
-		nextRegister.setBranch(branchALU);
-		nextRegister.setRegWrite(regWriteALU);
-		nextRegister.setMemToReg(memToRegALU);
+		executeMemoryRegister.replace(newExecuteMemoryRegister);
 	}
 	
 	private int add(int first, int second) {
@@ -136,6 +139,8 @@ public class ALU implements Executable {
 			boolean bitOfSecond = BinaryManiplator.getBitByIndex(second, i);
 			if(!bitOfFiirst && bitOfSecond)
 				return 1;
+			if(bitOfFiirst && !bitOfSecond)
+				return 0;
 		}
 		
 		return 0;
@@ -149,16 +154,16 @@ public class ALU implements Executable {
 		return first >>> second;
 	}
 	
-	private int branchIfEqual(int first, int second){
+	private boolean branchIfEqual(int first, int second){
 		if (first == second)
-			return 1;
-		return 0;
+			return true;
+		return false;
 	}
 	
-	private int branchIfNotEqual(int first, int second) {
+	private boolean branchIfNotEqual(int first, int second) {
 		if (first != second)
-			return 1;
-		return 0;
+			return true;
+		return false;
 	}
 
 }
