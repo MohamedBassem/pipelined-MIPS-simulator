@@ -38,10 +38,12 @@ public class RegisterFile implements Executable {
 		int instructionNumber = instructionFetchDecodeRegisters.getInstruction();
 		Instruction instruction = new Instruction(instructionNumber);
 		newIDER = instructionDecodeExecuteRegisters.clone();
-		
 		int rs = instruction.getRs();
 		int rt = instruction.getRt();
 
+		newIDER.setRegister1Value(registers.getReg(rs));
+		newIDER.setRegister2Value(registers.getReg(rt));
+		
 		if(instructionDecodeExecuteRegisters.isRegWrite()) {
 			int data = memoryWritebackRegisters.getALUResult();
 			int writeTo = memoryWritebackRegisters.getWriteBackRegister();
@@ -51,9 +53,6 @@ public class RegisterFile implements Executable {
 			}else {
 				registers.setReg(writeTo, data);
 			}
-		}else {
-			newIDER.setRegister1Value(registers.getReg(rs));
-			newIDER.setRegister2Value(registers.getReg(rt));
 		}
 		
 		int constant = instruction.getConstant();
