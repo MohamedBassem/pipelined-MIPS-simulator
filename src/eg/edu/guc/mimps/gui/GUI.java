@@ -5,8 +5,14 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -14,9 +20,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
+
 import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
 import eg.edu.guc.mimps.registers.Memory;
 import eg.edu.guc.mimps.registers.Registers;
@@ -29,7 +37,9 @@ public class GUI {
 	JFrame mainFrame;
 	JTable registersTable;
 	JTable memoryTable;
-	JTextPane editor;
+	JTextPane editor = new JTextPane();
+	JMenuBar mb;
+	String code = "lalal";
 
 	public GUI(Simulator simulator, Memory memory, Registers registers) {
 		this.simulator = simulator;
@@ -60,7 +70,6 @@ public class GUI {
 	}
 
 	private JScrollPane getEditor() {
-		editor = new JTextPane();
 		editor.setDocument(new AssemblyDocument());
 		TextLineNumber tln = new TextLineNumber(editor);
 		JScrollPane scroll = new JScrollPane(editor);
@@ -73,7 +82,7 @@ public class GUI {
 	}
 
 	private JMenuBar getMenuBar() {
-		JMenuBar mb = new JMenuBar();
+		mb = new JMenuBar();
 		final JMenuItem run = new JMenuItem(new ImageIcon("run.png"));
 		run.setMaximumSize(new Dimension(70, 100));
 		run.setDisabledIcon(new ImageIcon("run_disabled.png"));
@@ -89,13 +98,18 @@ public class GUI {
 		assemble.setMaximumSize(new Dimension(70, 100));
 		run.setEnabled(false);
 		runStep.setEnabled(false);
-
+		
+		if(code == "")
+			assemble.setEnabled(false);
+		
 		assemble.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					simulator.assemble(0, editor.getText());
+					code = editor.getText();
+					simulator.assemble(0, code);
+					System.out.println(code);
 					run.setEnabled(true);
 					runStep.setEnabled(true);
 
@@ -114,9 +128,9 @@ public class GUI {
 						e2.printStackTrace();
 					}
 
-				}
+				} 
 			}
-		});
+		}); 
 
 		run.addActionListener(new ActionListener() {
 
@@ -138,6 +152,49 @@ public class GUI {
 				}
 			}
 		});
+
+		open.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				final JFileChooser fc = new JFileChooser();
+				fc.setFileFilter(new FileFilter() {
+					
+					@Override
+					public String getDescription() {
+						return null;
+					}
+					
+					@Override
+					public boolean accept(File f) {
+						return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
+					}
+				});
+
+				// in response to a button click:
+				int returnVal = fc.showOpenDialog(mainFrame);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File file = fc.getSelectedFile();
+					BufferedReader reader;
+					try {
+						reader = new BufferedReader(new FileReader(file));
+						StringBuffer buffer = new StringBuffer();
+						String line = reader.readLine();
+						while (line != null) {
+							buffer.append(line + '\n');
+							line = reader.readLine();
+						}
+						editor.setText(buffer.toString());
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					} 
+					
+				}
+			}
+		});
+		mb.add(open);
 		mb.add(assemble);
 		mb.add(run);
 		mb.add(runStep);
