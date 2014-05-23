@@ -1,5 +1,6 @@
 package eg.edu.guc.mimps.components;
 
+import eg.edu.guc.mimps.assembler.Instruction;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
 import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
@@ -26,39 +27,37 @@ public class RegisterFile implements Executable {
 	
 	private static int signExtend(int val) {
 		int mostSigBit = val & (1 << 15);
-		System.out.println(Integer.toBinaryString(val));
-		System.out.println("most " + mostSigBit);
 		if(mostSigBit != 0)
-			for(int i=16;i<=31;i++) {
-				System.out.println(Integer.toBinaryString(val));
+			for(int i=16;i<=31;i++)
 				val |= (1 << i);
-			}
 		return val;
 	}
 	
 	@Override
 	public void execute() {
+		int instructionNumber = instructionFetchDecodeRegisters.getInstruction();
+		Instruction instruction = new Instruction(instructionNumber);
 		newIDER = instructionDecodeExecuteRegisters.clone();
-//		TODO get rs
-		int rs = 0;
-//		TODO get data
-		int data = 0;
-		int rd = instructionDecodeExecuteRegisters.getRd();
-		int rt = instructionDecodeExecuteRegisters.getRt();
-		boolean regDest = instructionDecodeExecuteRegisters.isRegDest();
 		
-		if(newIDER.isRegWrite()) {
-			if(regDest)
-				registers.setReg(rd, data);
-			else
-				registers.setReg(rt, data);
+		int rs = instruction.getRs();
+		int rt = instruction.getRt();
+
+		if(instructionDecodeExecuteRegisters.isRegWrite()) {
+			int data = memoryWritebackRegisters.getALUResult();
+			int writeTo = memoryWritebackRegisters.getWriteBackRegister();
+			if(instructionDecodeExecuteRegisters.isMemToReg()) {
+				data = memoryWritebackRegisters.getMemoryWord();
+				registers.setReg(writeTo, data);
+			}else {
+				registers.setReg(writeTo, data);
+			}
 		}else {
 			newIDER.setRegister1Value(registers.getReg(rs));
-			if(regDest)
-				newIDER.setRegister2Value(registers.getReg(rt));
+			newIDER.setRegister2Value(registers.getReg(rt));
 		}
-		int sign = instructionDecodeExecuteRegisters.getSignExtendedOffset();
-		newIDER.setSignExtendedOffset(signExtend(sign));
+		
+		int constant = instruction.getConstant();
+		newIDER.setSignExtendedOffset(signExtend(constant));
 	}
 
 	@Override
