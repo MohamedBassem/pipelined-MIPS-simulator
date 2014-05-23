@@ -34,8 +34,6 @@ import eg.edu.guc.mimps.simulator.Simulator;
 
 public class GUI {
 	Simulator simulator;
-	Memory memory;
-	Registers registers;
 	JFrame mainFrame;
 	JTable registersTable;
 	JTable memoryTable;
@@ -45,8 +43,6 @@ public class GUI {
 
 	public GUI(Simulator simulator, Memory memory, Registers registers) {
 		this.simulator = simulator;
-		this.memory = memory;
-		this.registers = registers;
 		startFrame();
 		update();
 	}
@@ -266,7 +262,7 @@ public class GUI {
 
 	public void update() {
 		for (int i = 0; i < 32; i++) {
-			registersTable.setValueAt(registers.getReg(i), i, 2);
+			registersTable.setValueAt(simulator.getRegisters().getReg(i), i, 2);
 		}
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
 	}
