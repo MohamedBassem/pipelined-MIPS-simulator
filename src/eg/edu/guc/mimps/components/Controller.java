@@ -3,6 +3,7 @@ package eg.edu.guc.mimps.components;
 import eg.edu.guc.mimps.assembler.Instruction;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
+import eg.edu.guc.mimps.utils.Constants;
 
 public class Controller implements Executable {
 	String rformatControls = "10000102";
@@ -63,29 +64,27 @@ public class Controller implements Executable {
 
 
 	public void toInstructionType(int opCode) {
-		
 		switch (opCode) {
-		// will change case depending on opCodes
-		case 0x00:
+		case Constants.ADD_OPCODE:
 			control =rformatControls; 
 			break;
-		case 0x08:
-		case 0x0C:
-		case 0x0D:
+		case Constants.ADDI_OPCODE:
+		case Constants.ORI_OPCODE:
+		case Constants.ANDI_OPCODE:
 			control=iformatControls; 
 			break;
-		case 0x2B:
+		case Constants.SW_OPCODE:
 			control = storeControls; 
 			break;
-		case 0x23:
+		case Constants.LW_OPCODE:
 			control = loadControls; 
 			break;
-		case 0x04:
-		case 0x05:
+		case Constants.BEQ_OPCODE:
+		case Constants.BNE_OPCODE:
 			control = branchControls;
 			break;
-		case 0x02:
-		case 0x03:
+		case Constants.J_OPCODE:
+		case Constants.JAL_OPCODE:
 			control =jformatControls; 
 			break;
 
