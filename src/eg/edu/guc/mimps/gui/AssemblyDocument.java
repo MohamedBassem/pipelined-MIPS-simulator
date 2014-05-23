@@ -28,7 +28,7 @@ public class AssemblyDocument extends DefaultStyledDocument {
 	private Hashtable instructionsKeywords;
 	private DefaultStyledDocument doc;
 	private Element rootElement;
-
+	
 	public AssemblyDocument() {
 		doc = this;
 		rootElement = doc.getDefaultRootElement();
@@ -45,11 +45,10 @@ public class AssemblyDocument extends DefaultStyledDocument {
 		registerKeyword = new SimpleAttributeSet();
 		Color blue = new Color(0, 0, 255);
 		StyleConstants.setForeground(registerKeyword, blue);
-		StyleConstants.setBold(registerKeyword, true);
 
 		instructionKeyword = new SimpleAttributeSet();
-		Color red = new Color(255, 0, 0);
-		StyleConstants.setForeground(instructionKeyword, red);
+		Color color = new Color(0, 153, 153);
+		StyleConstants.setForeground(instructionKeyword, color);
 		StyleConstants.setBold(instructionKeyword, true);
 
 		String[] registers = { "$0", "$zero", "$at", "$v0", "$v1", "$a0",
@@ -166,9 +165,9 @@ public class AssemblyDocument extends DefaultStyledDocument {
 	}
 
 	protected boolean isRegisterKeyword(String token) {
-		if (token.endsWith(",")) {
+		if (token.endsWith(",") && token.length() != 0) {
 			Object o = registersKeywords.get(token.substring(0,
-					token.length()).toLowerCase());
+					token.length()-1).toLowerCase());
 			return o == null ? false : true;
 		} else {
 			Object o = registersKeywords.get(token.toLowerCase());

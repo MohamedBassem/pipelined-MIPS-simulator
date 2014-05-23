@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -14,6 +15,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
 import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
 import eg.edu.guc.mimps.registers.Memory;
 import eg.edu.guc.mimps.registers.Registers;
@@ -97,9 +100,21 @@ public class GUI {
 					runStep.setEnabled(true);
 
 				} catch (SyntaxErrorException e1) {
+					try {
+						editor.getHighlighter().addHighlight(
+								editor.getDocument().getDefaultRootElement()
+										.getElement(e1.getLine() - 1)
+										.getStartOffset(),
+								editor.getDocument().getDefaultRootElement()
+										.getElement(e1.getLine())
+										.getStartOffset(),
+								new DefaultHighlighter.DefaultHighlightPainter(
+										Color.red));
+					} catch (BadLocationException e2) {
+						e2.printStackTrace();
+					}
 
 				}
-
 			}
 		});
 
@@ -107,7 +122,7 @@ public class GUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				simulator.run(0, editor.getText());
+				simulator.run();
 				run.setEnabled(false);
 				runStep.setEnabled(false);
 			}
@@ -123,8 +138,6 @@ public class GUI {
 				}
 			}
 		});
-		mb.add(open);
-		mb.add(save);
 		mb.add(assemble);
 		mb.add(run);
 		mb.add(runStep);
