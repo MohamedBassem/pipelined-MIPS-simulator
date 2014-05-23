@@ -6,16 +6,16 @@ import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
 import eg.edu.guc.mimps.utils.Constants;
 
 public class Controller implements Executable {
-	String rformatControls = "10000102";
-	String iformatControls = "01000102";
-	String jformatControls = "XXXXXXX3";
-	String loadControls = "01010110";
-	String storeControls = "X10010X0";
-	String branchControls = "X01000X1";
-	String control;
-
-	public InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
-	public InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
+	private InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
+	private InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
+	private String rformatControls = "1000010";
+	private String iformatControls = "0100010";
+	private String jformatControls = "XXXXXXX";
+	private String loadControls = "0101011";
+	private String storeControls = "X10010X";
+	private String branchControls = "X01000X";
+	private String control;
+	private int aluOp;
 
 	public Controller(
 			InstructionFetchDecodeRegisters instructionFetchDecodeRegisters,
@@ -30,7 +30,7 @@ public class Controller implements Executable {
 		int instructionNumber = instructionFetchDecodeRegisters
 				.getInstruction();
 		Instruction instruction = new Instruction(instructionNumber);
-		this.toInstructionType(instruction.getOpcode());
+		aluOp = this.toInstructionType(instruction.getOpcode());
 
 	}
 
@@ -50,8 +50,7 @@ public class Controller implements Executable {
 				.charAt(5)));
 		instructionDecodeExecuteRegisters.setMemToReg(toBoolean(control
 				.charAt(6)));
-		instructionDecodeExecuteRegisters.setAluOpt(Integer.parseInt(""
-				+ control.charAt(7)));
+		instructionDecodeExecuteRegisters.setAluOpt(aluOp);
 	}
 
 	public boolean toBoolean(char value) {
@@ -61,33 +60,46 @@ public class Controller implements Executable {
 		return false;
 	}
 
-
-
-	public void toInstructionType(int opCode) {
+	public int toInstructionType(int opCode) {
 		switch (opCode) {
 		case Constants.ADD_OPCODE:
-			control =rformatControls; 
+			control = rformatControls;
+			aluOp = 2;
 			break;
 		case Constants.ADDI_OPCODE:
+			control = iformatControls;
+			aluOp = 5;
+			break;
 		case Constants.ORI_OPCODE:
+			control = iformatControls;
+			aluOp = 7;
+			break;
 		case Constants.ANDI_OPCODE:
-			control=iformatControls; 
+			control = iformatControls;
+			aluOp = 6;
 			break;
 		case Constants.SW_OPCODE:
-			control = storeControls; 
+			control = storeControls;
+			aluOp = 0;
 			break;
 		case Constants.LW_OPCODE:
-			control = loadControls; 
+			control = loadControls;
+			aluOp = 0;
 			break;
 		case Constants.BEQ_OPCODE:
+			control = branchControls;
+			aluOp = 1;
+			break;
 		case Constants.BNE_OPCODE:
 			control = branchControls;
+			aluOp = 4;
 			break;
 		case Constants.J_OPCODE:
 		case Constants.JAL_OPCODE:
-			control =jformatControls; 
+			control = jformatControls;
+			aluOp = 3;
 			break;
-
 		}
+		return aluOp;
 	}
 }

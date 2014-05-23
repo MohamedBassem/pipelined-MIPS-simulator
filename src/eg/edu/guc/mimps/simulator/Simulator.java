@@ -3,6 +3,8 @@ package eg.edu.guc.mimps.simulator;
 import java.io.IOException;
 import java.io.StringReader;
 
+import com.sun.org.apache.bcel.internal.generic.NOP;
+
 import eg.edu.guc.mimps.assembler.Assembler;
 import eg.edu.guc.mimps.components.ALU;
 import eg.edu.guc.mimps.components.Controller;
@@ -33,14 +35,17 @@ public class Simulator {
 	private Memory memory;
 	private Registers registers;
 	
+	private int lastPc;
+	private int NOPcount;
+	boolean done;
+	
 	GUI gui;
 	
 	private int pc;
 	
 	public Simulator(){
 		this.reset();
-		// TODO
-		new GUI(this,memory,registers);
+		gui = new GUI(this,memory,registers);
 	}
 	
 	public void reset(){
@@ -48,6 +53,10 @@ public class Simulator {
 		instructionDecodeExecuteRegisters = new InstructionDecodeExecuteRegisters();
 		executeMemoryRegisters = new ExecuteMemoryRegisters();
 		memoryWritebackRegisters = new MemoryWritebackRegisters();
+		
+		lastPc = -1;
+		NOPcount = 0;
+		done = false;
 		
 		this.memory = new Memory();
 		this.registers = new Registers();
@@ -69,7 +78,19 @@ public class Simulator {
 	
 	public boolean step(){
 		if(!assembler.execute(pc)){
-			return false;
+			if(NOPcount == 0){
+				lastPc = pc;
+				done = true;
+				NOPcount++;
+			}else if( NOPcount > 0 && lastPc != pc ){
+				NOPcount = 0;
+				done = false;
+				lastPc = -1;
+			}else if(NOPcount == 5){
+				return false;
+			}else{
+				NOPcount++;
+			}
 		}
 		registerFile.execute();
 		controller.execute();
@@ -87,7 +108,9 @@ public class Simulator {
 		if(executeMemoryRegisters.isBranch() && !executeMemoryRegisters.isZero()){
 			pc = executeMemoryRegisters.getBranchAddress();
 		}else{
-			pc += 4;
+			if(!done){
+				pc += 4;
+			}
 		}
 		gui.update();
 		return true;
