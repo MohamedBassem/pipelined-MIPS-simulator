@@ -164,10 +164,10 @@ public class Assembler {
 		} else if (instruction.matches((pattern = "([^ ,]+) *\\$([^ ,]+) *,? *\\$([^ ,]+) *,? *([^ ]+)"))) {
 			pat = Pattern.compile(pattern);
 			matcher = pat.matcher(instruction);
-			if (!labels.containsKey(matcher.group(4))) {
-				throw new SyntaxErrorException("Cannot match any label + " + matcher.group(4), line);
-			}
 			if (matcher.find()) {
+				if (!labels.containsKey(matcher.group(4))) {
+					throw new SyntaxErrorException("Cannot match any label + " + matcher.group(4), line);
+				}
 				result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line),  getRegisterNumber(matcher.group(3), line), labels.get(matcher.group(4)), line);
 			}
 			
