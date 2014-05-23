@@ -52,7 +52,7 @@ public class Instruction {
 	}
 	
 	protected void setRs(int rs) {
-		instruction = BinaryManiplator.getPartialValue(instruction, 21, 25);
+		instruction = BinaryManiplator.setPartialValue(instruction, 21, 25,rs);
 	}
 	
 	protected void setRd(int rd) {
@@ -85,4 +85,11 @@ public class Instruction {
 		return instruction;
 	}
 	
+	public String toString(){
+		String ret = "";
+		for(int i=31;i>=0;i--){
+			ret += (instruction & (1<<i)) > 0 ? '1':'0';
+		}
+		return ret;
+	}
 }

@@ -131,6 +131,7 @@ public class GUI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					code = editor.getText();
+					System.out.println(code);
 					simulator.assemble(0, code);
 					assemble.setEnabled(false);
 					
