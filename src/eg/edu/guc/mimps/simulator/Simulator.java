@@ -1,5 +1,6 @@
 package eg.edu.guc.mimps.simulator;
 
+import java.io.IOException;
 import java.io.StringReader;
 
 import eg.edu.guc.mimps.assembler.Assembler;
@@ -7,6 +8,7 @@ import eg.edu.guc.mimps.components.ALU;
 import eg.edu.guc.mimps.components.Controller;
 import eg.edu.guc.mimps.components.DataMemory;
 import eg.edu.guc.mimps.components.RegisterFile;
+import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
 import eg.edu.guc.mimps.gui.GUI;
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
@@ -57,11 +59,11 @@ public class Simulator {
 		dataMemory = new DataMemory(executeMemoryRegisters,memoryWritebackRegisters,memory);
 	}
 	
-	public boolean assemble(int origin , String code ){
+	public boolean assemble(int origin , String code ) throws SyntaxErrorException{
 		this.reset();
 		this.pc = origin;
 		assembler = new Assembler(origin,new StringReader(code),instructionFetchDecodeRegisters);
-		// TODO assembler.assemble()
+		assembler.assemble();
 		return true;
 	}
 	
