@@ -228,13 +228,13 @@ public class GUI {
 	}
 
 	private JScrollPane getMemoryTable() {
-		DefaultTableModel model = new DefaultTableModel(10, 10);
+		DefaultTableModel model = new DefaultTableModel(10, 9);
 		memoryTable = new JTable(model);
 		memoryTable.getColumn(memoryTable.getColumnName(0)).setHeaderValue(
 				"Address");
-		for (int i = 1; i < 10; i++) {
+		for (int i = 1; i < 9; i++) {
 			memoryTable.getColumn(memoryTable.getColumnName(i)).setHeaderValue(
-					"Value" + i);
+					"Value (+" + (i-1)*4 + ")");
 		}
 		memoryTable.setEnabled(false);
 		JScrollPane scroll = new JScrollPane(memoryTable);
