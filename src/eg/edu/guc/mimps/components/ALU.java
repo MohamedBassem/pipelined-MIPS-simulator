@@ -14,7 +14,7 @@ public class ALU implements Executable {
 	
 	public ALU(
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
-			ExecuteMemoryRegisters executeMemoryRegisters, Instruction instruction) {
+			ExecuteMemoryRegisters executeMemoryRegisters) {
 			decodeExecuteRegister = instructionDecodeExecuteRegisters;
 			executeMemoryRegister = executeMemoryRegisters;
 	}
