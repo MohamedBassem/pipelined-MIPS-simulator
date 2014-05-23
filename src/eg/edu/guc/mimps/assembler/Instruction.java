@@ -11,6 +11,10 @@ public class Instruction {
 		
 	}
 	
+	public Instruction(int instruction) {
+		this.instruction = instruction;
+	}
+	
 	public int getOpcode() {
 		return BinaryManiplator.getPartialValue(instruction, 26, 31);
 	}
@@ -61,11 +65,11 @@ public class Instruction {
 
 	
 	public int getConstant() {
-		return 0;
+		return BinaryManiplator.getPartialValue(instruction, 0, 15);
 	}
 	
-	protected void setConstant(int offset) {
-		
+	protected void setConstant(int value) {
+		instruction = BinaryManiplator.setPartialValue(instruction, 0, 15, value);
 	}
 	
 	public int getJumpAddress() {
@@ -73,7 +77,7 @@ public class Instruction {
 	}
 	
 	protected void setJumpAddress(int jumpAddress) {
-		BinaryManiplator.setPartialValue(instruction, 0, 25, jumpAddress);
+		instruction = BinaryManiplator.setPartialValue(instruction, 0, 25, jumpAddress);
 		
 	}
 	
