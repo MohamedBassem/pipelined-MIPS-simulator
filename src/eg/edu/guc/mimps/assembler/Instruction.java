@@ -65,11 +65,11 @@ public class Instruction {
 
 	
 	public int getConstant() {
-		return 0;
+		return BinaryManiplator.getPartialValue(instruction, 0, 15);
 	}
 	
-	protected void setConstant(int offset) {
-		
+	protected void setConstant(int value) {
+		BinaryManiplator.setPartialValue(instruction, 0, 15, value);
 	}
 	
 	public int getJumpAddress() {
