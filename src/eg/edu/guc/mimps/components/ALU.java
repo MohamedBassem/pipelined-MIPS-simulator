@@ -1,6 +1,5 @@
 package eg.edu.guc.mimps.components;
 
-
 import eg.edu.guc.mimps.assembler.Instruction;
 import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
 import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
@@ -8,10 +7,10 @@ import eg.edu.guc.mimps.utils.BinaryManiplator;
 import eg.edu.guc.mimps.utils.Constants;
 
 public class ALU implements Executable {
+
 	InstructionDecodeExecuteRegisters decodeExecuteRegister;
 	ExecuteMemoryRegisters executeMemoryRegister;
 	ExecuteMemoryRegisters newExecuteMemoryRegister;
-	Instruction instruction;
 	
 	public ALU(
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
@@ -28,11 +27,10 @@ public class ALU implements Executable {
 		int register1Value = decodeExecuteRegister.getRegister1Value();
 		int register2Value = decodeExecuteRegister.getRegister2Value();
 		int signExtendedOffset = decodeExecuteRegister.getSignExtendedOffset();
+		//will be fixed after fixing opcodes
 		int opCode = decodeExecuteRegister.getAluOpt();
-		int funct = instruction.getFunct();
-		
 		if(opCode == 0) {
-			switch (funct){
+			switch (opCode){
 			case Constants.ADD_FUNC: ALUResultALU = add(register1Value, register2Value);break;
 			case Constants.SUB_FUNC: ALUResultALU = sub(register1Value, register2Value);break;
 			case Constants.SLL_FUNC: ALUResultALU = shiftLeftLogical(register1Value, register2Value);break;
@@ -56,9 +54,16 @@ public class ALU implements Executable {
 			default:break;
 			}
 		}
+		
 		newExecuteMemoryRegister.setZero(zeroALU);
 		newExecuteMemoryRegister.setALUResult(ALUResultALU);
-			}
+		newExecuteMemoryRegister.setMemRead(decodeExecuteRegister.isMemRead());
+		newExecuteMemoryRegister.setMemWrite(decodeExecuteRegister.isMemWrite());
+		newExecuteMemoryRegister.setBranch(decodeExecuteRegister.isBranch());
+		newExecuteMemoryRegister.setRegWrite(decodeExecuteRegister.isRegWrite());
+		newExecuteMemoryRegister.setMemToReg(decodeExecuteRegister.isMemToReg());
+		
+	}
 
 	
 	public void write() {
