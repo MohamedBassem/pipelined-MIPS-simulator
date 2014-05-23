@@ -76,7 +76,7 @@ public class Assembler {
 	
 	public void print() {
 		for (Integer key : instructions.keySet()) {
-			System.out.println(key + " : " + instructions.toString());
+			System.out.println(key + " : " + instructions.get(key).getConstant());
 		}
 	}
 	
@@ -185,7 +185,7 @@ public class Assembler {
 				if (!types.containsKey(matcher.group(1)) || !types.get(matcher.group(1)).equals("BRANCHES")) {
 					throw new SyntaxErrorException("Invalid instruction", line);
 				}
-				int relativeAddress = (cursor - labels.get(matcher.group(4))) / 4;
+				int relativeAddress = (labels.get(matcher.group(4)) - cursor) / 4;
 				
 				result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line),  getRegisterNumber(matcher.group(3), line), relativeAddress, line);
 			}
