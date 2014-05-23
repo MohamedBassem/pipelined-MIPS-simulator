@@ -37,11 +37,6 @@ public class AssemblyDocument extends DefaultStyledDocument {
 		normal = new SimpleAttributeSet();
 		StyleConstants.setForeground(normal, Color.black);
 
-		comment = new SimpleAttributeSet();
-		Color green = new Color(0, 120, 0);
-		StyleConstants.setForeground(comment, green);
-		StyleConstants.setItalic(comment, true);
-
 		registerKeyword = new SimpleAttributeSet();
 		Color blue = new Color(0, 0, 255);
 		StyleConstants.setForeground(registerKeyword, blue);
@@ -100,12 +95,6 @@ public class AssemblyDocument extends DefaultStyledDocument {
 		if (endOffset >= contentLength)
 			endOffset = contentLength - 1;
 		doc.setCharacterAttributes(startOffset, lineLength, normal, true);
-		int index = content.indexOf(getSingleLineDelimiter(), startOffset);
-		if ((index > -1) && (index < endOffset)) {
-			doc.setCharacterAttributes(index, endOffset - index + 1, comment,
-					false);
-			endOffset = index - 1;
-		}
 		checkForTokens(content, startOffset, endOffset);
 	}
 
@@ -180,7 +169,4 @@ public class AssemblyDocument extends DefaultStyledDocument {
 		return o == null ? false : true;
 	}
 
-	protected String getSingleLineDelimiter() {
-		return "#";
-	}
 }

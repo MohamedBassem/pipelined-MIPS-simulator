@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -53,8 +55,8 @@ public class GUI {
 		mainFrame = new JFrame();
 		JMenuBar menu = getMenuBar();
 		mainFrame.setMinimumSize(new Dimension((int) Toolkit
-				.getDefaultToolkit().getScreenSize().getWidth() - 70,
-				(int) Toolkit.getDefaultToolkit().getScreenSize().height));
+				.getDefaultToolkit().getScreenSize().getWidth()/2,
+				(int) Toolkit.getDefaultToolkit().getScreenSize().height/2));
 		mainFrame.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
 		mainFrame.setTitle("MIPS Simulator");
 		mainFrame.setJMenuBar(menu);
@@ -95,7 +97,7 @@ public class GUI {
 		save.setMaximumSize(new Dimension(70, 100));
 		JMenuItem open = new JMenuItem(new ImageIcon("open.png"));
 		open.setMaximumSize(new Dimension(70, 100));
-		JMenuItem assemble = new JMenuItem(new ImageIcon("assemble.png"));
+		final JMenuItem assemble = new JMenuItem(new ImageIcon("assemble.png"));
 		assemble.setDisabledIcon(new ImageIcon("assemble_disabled.png"));
 		assemble.setMaximumSize(new Dimension(70, 100));
 		run.setEnabled(false);
@@ -111,7 +113,8 @@ public class GUI {
 				try {
 					code = editor.getText();
 					simulator.assemble(0, code);
-					System.out.println(code);
+					assemble.setEnabled(false);
+					
 					run.setEnabled(true);
 					runStep.setEnabled(true);
 
@@ -124,11 +127,31 @@ public class GUI {
 								editor.getDocument().getDefaultRootElement().getElement(e1.getLine() - 1).getEndOffset(),
 								new DefaultHighlighter.DefaultHighlightPainter(
 										Color.red));
+
 					} catch (BadLocationException e2) {
 						e2.printStackTrace();
 					}
 
 				} 
+				
+				editor.addKeyListener(new KeyListener() {
+					
+					@Override
+					public void keyTyped(KeyEvent arg0) {
+						run.setEnabled(false);
+						runStep.setEnabled(false);
+						assemble.setEnabled(true);
+						editor.getHighlighter().removeAllHighlights();		
+					}
+					
+					@Override
+					public void keyReleased(KeyEvent arg0) {
+					}
+					
+					@Override
+					public void keyPressed(KeyEvent arg0) {
+					}
+				});
 			}
 		}); 
 
