@@ -28,8 +28,7 @@ public class Controller implements Executable {
 	public void execute() {
 		Instruction instruction = instructionFetchDecodeRegisters
 				.getInstruction();
-		String instructionType = this.toInstructionType(instruction.getOpcode());
-		this.control = getControlString(instructionType);
+		this.control = this.toInstructionType(instruction.getOpcode());
 
 	}
 
@@ -60,60 +59,37 @@ public class Controller implements Executable {
 		return false;
 	}
 
-	public String getControlString(String instructionType) {
-		switch (instructionType) {
 
-		case "rType":
-			return rformatControls;
-
-		case "iType":
-			return iformatControls;
-
-		case "branch":
-			return branchControls;
-
-		case "load":
-			return loadControls;
-
-		case "store":
-			return storeControls;
-
-		case "jType":
-			return jformatControls;
-
-		}
-		return instructionType;
-	}
 
 	public String toInstructionType(int opCode) {
-		String type = "";
+		
 		switch (opCode) {
 		// will change case depending on opCodes
 		case 0:
-			type = "rType";
+			control =rformatControls; 
 			break;
 		case 1:
 		case 4:
 		case 5:
-			type = "iType";
+			control=rformatControls; 
 			break;
 		case 3:
-			type = "store";
+			control = storeControls; 
 			break;
 		case 2:
-			type = "load";
+			control = loadControls; 
 			break;
 		case 6:
 		case 7:
-			type = "branch";
+			control = branchControls;
 			break;
 		case 9:
 		case 10:
 		case 11:
-			type = "jType";
+			control =jformatControls; 
 			break;
 
 		}
-		return type;
+		return control; 
 	}
 }
