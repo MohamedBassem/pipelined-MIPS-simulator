@@ -5,11 +5,6 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -19,6 +14,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.table.DefaultTableModel;
+import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
 import eg.edu.guc.mimps.registers.Memory;
 import eg.edu.guc.mimps.registers.Registers;
 import eg.edu.guc.mimps.simulator.Simulator;
@@ -35,17 +31,17 @@ public class GUI {
 	public GUI(Simulator simulator, Memory memory, Registers registers) {
 		this.simulator = simulator;
 		this.memory = memory;
-		this.registers = registers;		
+		this.registers = registers;
 	}
 
 	public void startFrame() {
 		mainFrame = new JFrame();
 		JMenuBar menu = getMenuBar();
 		mainFrame.setMinimumSize(new Dimension((int) Toolkit
-				.getDefaultToolkit().getScreenSize().getWidth()-70,
+				.getDefaultToolkit().getScreenSize().getWidth() - 70,
 				(int) Toolkit.getDefaultToolkit().getScreenSize().height));
 		mainFrame.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
-		mainFrame.setTitle("MIMPS Simulator");
+		mainFrame.setTitle("MIPS Simulator");
 		mainFrame.setJMenuBar(menu);
 		JSplitPane leftPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
 				getEditor(), getMemoryTable());
@@ -62,27 +58,7 @@ public class GUI {
 
 	private JScrollPane getEditor() {
 		editor = new JTextPane();
-		editor.addKeyListener
-		(
-		new KeyListener()
-		{
-		@Override
-		public void keyPressed(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		@Override
-		public void keyReleased(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		@Override
-		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-		}
-		);
+		editor.setDocument(new AssemblyDocument());
 		TextLineNumber tln = new TextLineNumber(editor);
 		JScrollPane scroll = new JScrollPane(editor);
 		scroll.setRowHeaderView(tln);
@@ -92,7 +68,7 @@ public class GUI {
 		scroll.setMinimumSize(new Dimension(700, 400));
 		return scroll;
 	}
-	
+
 	private JMenuBar getMenuBar() {
 		JMenuBar mb = new JMenuBar();
 		final JMenuItem run = new JMenuItem(new ImageIcon("run.png"));
@@ -110,23 +86,25 @@ public class GUI {
 		assemble.setMaximumSize(new Dimension(70, 100));
 		run.setEnabled(false);
 		runStep.setEnabled(false);
-		
+
 		assemble.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(simulator.assemble(0,editor.getText())) {
+				try {
+					simulator.assemble(0, editor.getText());
 					run.setEnabled(true);
 					runStep.setEnabled(true);
-				} else {
-					
+
+				} catch (SyntaxErrorException e1) {
+
 				}
-				
+
 			}
 		});
-		
+
 		run.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				simulator.run(0, editor.getText());
@@ -134,12 +112,12 @@ public class GUI {
 				runStep.setEnabled(false);
 			}
 		});
-		
+
 		runStep.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!simulator.step()) {
+				if (!simulator.step()) {
 					runStep.setEnabled(false);
 					run.setEnabled(true);
 				}
@@ -152,7 +130,7 @@ public class GUI {
 		mb.add(runStep);
 		return mb;
 	}
-	
+
 	private JScrollPane getRegistersTable() {
 		String[] names = { "Register", "Number", "Value" };
 		String[] registers = { "$zero", "$at", "$v0", "$v1", "$a0", "$a1",
@@ -169,7 +147,7 @@ public class GUI {
 		}
 		registersTable.setValueAt("pc", 32, 0);
 		registersTable.setValueAt("hi", 33, 0);
-		registersTable.setValueAt("lo", 34, 0);	
+		registersTable.setValueAt("lo", 34, 0);
 		registersTable.setEnabled(false);
 		JScrollPane scroll = new JScrollPane(registersTable);
 		scroll.setMinimumSize(new Dimension(400, Toolkit.getDefaultToolkit()
@@ -198,12 +176,12 @@ public class GUI {
 		}
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
 	}
-	
-	public static void main(String[]args) {
+
+	public static void main(String[] args) {
 		Registers registers = new Registers();
 		Memory memory = new Memory();
 		Simulator simulator = new Simulator();
-		
+
 		GUI gui = new GUI(simulator, memory, registers);
 		gui.startFrame();
 		gui.update();
