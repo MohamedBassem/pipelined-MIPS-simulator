@@ -11,6 +11,10 @@ public class Instruction {
 		
 	}
 	
+	public Instruction(int instruction) {
+		this.instruction = instruction;
+	}
+	
 	public int getOpcode() {
 		return BinaryManiplator.getPartialValue(instruction, 26, 31);
 	}
