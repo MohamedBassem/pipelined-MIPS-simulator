@@ -58,6 +58,7 @@ public class Simulator {
 		done = false;
 		
 		cycles = 0;
+		pc = 0;
 		
 		this.memory = new Memory();
 		this.registers = new Registers();
@@ -102,21 +103,30 @@ public class Simulator {
 		cycles++;
 		gui.update();
 		
+		
+		if(!done){
+			pc += 4;
+		}
+		
 		if(executeMemoryRegisters.isBranch() && executeMemoryRegisters.isZero()){
 			pc = executeMemoryRegisters.getBranchAddress();
 			NOPcount = 0;
 			done = false;
-		}else{
-			if(!done){
-				pc += 4;
-			}
+		}
+		
+		if(instructionDecodeExecuteRegisters.isJump()){
+			int newPc = instructionDecodeExecuteRegisters.getIncrementedPc();
+			newPc &= 0xF0000000;
+			pc = newPc | (instructionDecodeExecuteRegisters.getJumpAddress() << 2);
+			NOPcount = 0;
+			done = false;
 		}
 		gui.update();
 		return true;
 	}
 	
 	public void run(){
-		while(cycles < 10000){
+		while(cycles < 1000000){
 			if(!step()){
 				break;
 			}

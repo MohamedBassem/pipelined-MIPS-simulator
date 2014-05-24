@@ -48,6 +48,7 @@ public class RegisterFile implements Executable {
 		newIDER.setRt(rt);
 		newIDER.setIncrementedPc(instructionFetchDecodeRegisters.getIncrementedPc());
 		newIDER.setShamt(instruction.getShamt());
+		newIDER.setJumpAddress(instruction.getJumpAddress());
 		
 		if(memoryWritebackRegisters.isRegWrite()) {
 			int data = memoryWritebackRegisters.getALUResult();

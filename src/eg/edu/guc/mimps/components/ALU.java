@@ -100,12 +100,16 @@ public class ALU implements Executable {
 		newExecuteMemoryRegister.setZero(zero);
 		newExecuteMemoryRegister.setBranchAddress(decodeExecuteRegister.getIncrementedPc() + decodeExecuteRegister.getSignExtendedOffset()*4);
 		newExecuteMemoryRegister.setRegisterValueToMemory(decodeExecuteRegister.getRegister2Value());
-		if(decodeExecuteRegister.isRegDest()){
+		newExecuteMemoryRegister.setALUResult(aluResult);
+		// If jal
+		if(decodeExecuteRegister.isJump() && decodeExecuteRegister.isRegWrite()){
+			newExecuteMemoryRegister.setWriteBackRegister(31);
+			newExecuteMemoryRegister.setALUResult(decodeExecuteRegister.getIncrementedPc());
+		}else if(decodeExecuteRegister.isRegDest()){
 			newExecuteMemoryRegister.setWriteBackRegister(decodeExecuteRegister.getRd());
 		}else{
 			newExecuteMemoryRegister.setWriteBackRegister(decodeExecuteRegister.getRt());
 		}
-		newExecuteMemoryRegister.setALUResult(aluResult);
 		newExecuteMemoryRegister.setMemRead(decodeExecuteRegister.isMemRead());
 		newExecuteMemoryRegister.setMemWrite(decodeExecuteRegister.isMemWrite());
 		newExecuteMemoryRegister.setBranch(decodeExecuteRegister.isBranch());
