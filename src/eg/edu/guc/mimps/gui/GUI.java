@@ -11,13 +11,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
@@ -27,6 +30,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
+
 import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
 import eg.edu.guc.mimps.simulator.Simulator;
 
@@ -184,7 +188,50 @@ public class GUI {
 				}
 			}
 		});
-
+		
+		save.addActionListener(  
+		        new ActionListener()  
+		        {  
+		            public void actionPerformed(ActionEvent event)  
+		            {  
+		                JFileChooser chooser = new JFileChooser(){
+		                	@Override
+		                	public void approveSelection(){
+		                        File f = getSelectedFile();
+		                        if(f.exists() && getDialogType() == SAVE_DIALOG){
+		                        	int result = JOptionPane.showConfirmDialog(this,"A file with the same name already exists, do you wish to overwrite?","Existing file",JOptionPane.YES_NO_CANCEL_OPTION);
+		                            switch(result){
+		                                case JOptionPane.YES_OPTION:
+		                                    super.approveSelection();
+		                                    return;
+		                                case JOptionPane.NO_OPTION:
+		                                    return;
+		                                case JOptionPane.CLOSED_OPTION:
+		                                    return;
+		                                case JOptionPane.CANCEL_OPTION:
+		                                    cancelSelection();
+		                                    return;
+		                            }
+		                        }
+		                        super.approveSelection();
+		                    }  
+		                };
+		                int retrival = chooser.showSaveDialog(null);
+		                if (retrival == JFileChooser.APPROVE_OPTION) {
+		                    try {
+		                    	String write = editor.getText();
+		                    	System.out.println(chooser.getSelectedFile().getName());
+		                        FileWriter fw = new FileWriter(chooser.getSelectedFile());
+		                        fw.write(write);
+		                        fw.flush();
+		                        fw.close();
+		                    } catch (Exception ex) {
+		                        ex.printStackTrace();
+		                    }
+		                } 
+		            }  
+		        }); 
+		
 		open.addActionListener(new ActionListener() {
 
 			@Override
@@ -229,6 +276,7 @@ public class GUI {
 			}
 		});
 		mb.add(open);
+		mb.add(save);
 		mb.add(assemble);
 		mb.add(run);
 		mb.add(runStep);
