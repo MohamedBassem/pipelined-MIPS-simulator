@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -129,7 +130,6 @@ public class GUI {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					code = editor.getText();
-					System.out.println(code);
 					simulator.assemble(0, code);
 					assemble.setEnabled(false);
 					
@@ -256,6 +256,11 @@ public class GUI {
 			memoryTable.getColumn(memoryTable.getColumnName(i)).setHeaderValue(
 					"Value (+" + (i-1)*4 + ")");
 		}
+		Set<Integer> keys = simulator.getMemory().keySet();
+		int pc = simulator.getPc();
+		for (int i = 0; i < 9; i ++) {
+			memoryTable.setValueAt(pc + i*4, i, 0);
+		}
 		memoryTable.setEnabled(false);
 		JScrollPane scroll = new JScrollPane(memoryTable);
 		scroll.setMinimumSize(new Dimension(700, 200));
@@ -267,6 +272,13 @@ public class GUI {
 			registersTable.setValueAt(simulator.getRegisters().getReg(i), i, 2);
 		}
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
+		
+		for (int j = 0; j < 10; j++) {
+			memoryTable.setValueAt(simulator.getMemory().get(memoryTable.getValueAt(j, 0)), j, 1);
+			/*for(int k = 2; k < 9; k++) {
+				memoryTable.setValueAt(simulator.getMemory().get(memoryTable.getValueAt(j, 0)) + (k-1)*4, j, k);
+			}*/
+		}
 	}
 
 }
