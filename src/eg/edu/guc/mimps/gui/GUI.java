@@ -275,18 +275,17 @@ public class GUI {
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
 
 		for (int j = 0; j < 10; j++) {
-			memoryTable.setValueAt(
-					simulator.getMemory().get(memoryTable.getValueAt(j, 0)), j,
+			memoryTable.setValueAt(String.format("%08x",
+					simulator.getMemory().get(memoryTable.getValueAt(j, 0))), j,
 					1);
 			if (simulator.getMemory().get(memoryTable.getValueAt(j, 0)) != null) {
 				for (int k = 2; k < 9; k++) {
-					memoryTable.setValueAt(
-							simulator.getMemory().get(
+					memoryTable.setValueAt(String.format("%08x",
+							(simulator.getMemory().get(
 									memoryTable.getValueAt(j, 0))
-									+ (k - 1) * 4, j, k);
+									+ (k - 1) * 4)), j, k);
 				}
 			}
-			continue;
 		}
 	}
 
