@@ -101,7 +101,7 @@ public class Simulator {
 		dataMemory.write();
 		cycles++;
 		gui.update();
-		System.out.println(memory);
+		
 		if(executeMemoryRegisters.isBranch() && executeMemoryRegisters.isZero()){
 			pc = executeMemoryRegisters.getBranchAddress();
 			NOPcount = 0;

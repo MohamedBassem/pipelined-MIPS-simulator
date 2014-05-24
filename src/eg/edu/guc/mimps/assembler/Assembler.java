@@ -307,7 +307,6 @@ public class Assembler {
 	}
 	
 	private Instruction decodeIInstruction(String name, int rt, int rs, int address, int line) throws SyntaxErrorException {
-		System.out.println(name);
 		Instruction instruction = new Instruction();
 		instruction.setOpcode(opcodes.get(name));
 		instruction.setRt(rt);

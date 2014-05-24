@@ -32,7 +32,7 @@ public class ALU implements Executable {
 
 	public void execute() {
 		int aluOpt = decodeExecuteRegister.getAluOpt();
-		int functionCode = BinaryManiplator.getPartialValue(decodeExecuteRegister.getSignExtendedOffset(), 0, 5);
+		int functionCode = BinaryManiplator.getUnsignedPartialValue(decodeExecuteRegister.getSignExtendedOffset(), 0, 5);
 		
 		int aluOperation = 0;
 		
@@ -88,7 +88,7 @@ public class ALU implements Executable {
 			case SLT : aluResult = setLessThan(first, second);break;
 			case SLTU: aluResult = setLessThanUnsigned(first, second);break;
 		}
-		
+
 		boolean zero = false;
 		if(aluOpt == 1){
 			zero = (aluResult == 0);
