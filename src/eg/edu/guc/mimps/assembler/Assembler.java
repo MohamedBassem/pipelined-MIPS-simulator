@@ -321,7 +321,6 @@ public class Assembler {
 	}
 	
 	private void initRegisters() {
-		registerPrefix = new HashMap<Character, Integer>();
 		registers = new HashMap<String, Integer>();
 		String[] registersNames = { "$zero", "$at", "$v0", "$v1", "$a0", "$a1",
 				"$a2", "$a3", "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6",
@@ -331,7 +330,6 @@ public class Assembler {
 			registers.put(i+"", i);
 			registers.put(registersNames[i].substring(1), i);
 		}
-		
 		
 	}
 	
