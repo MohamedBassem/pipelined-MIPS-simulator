@@ -8,14 +8,16 @@ import eg.edu.guc.mimps.utils.Constants;
 public class Controller implements Executable {
 	private InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
 	private InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
-	private String rformatControls = "1000010";
-	private String iformatControls = "0100010";
-	private String jformatControls = "XXXXXXX";
-	private String loadControls = "0101011";
-	private String storeControls = "X10010X";
-	private String branchControls = "X01000X";
+	private String rformatControls = "10000100";
+	private String iformatControls = "01000100";
+	private String jControls = "XXXXXXX1";
+	private String jalControls = "XXXXX1X1";
+	private String loadControls = "01010110";
+	private String storeControls = "X10010X0";
+	private String branchControls = "X01000X0";
 	private String control;
 	private int aluOp;
+	private Instruction instruction;
 
 	public Controller(
 			InstructionFetchDecodeRegisters instructionFetchDecodeRegisters,
@@ -29,7 +31,7 @@ public class Controller implements Executable {
 	public void execute() {
 		int instructionNumber = instructionFetchDecodeRegisters
 				.getInstruction();
-		Instruction instruction = new Instruction(instructionNumber);
+		this.instruction = new Instruction(instructionNumber);
 		aluOp = this.toInstructionType(instruction.getOpcode());
 
 	}
@@ -50,6 +52,9 @@ public class Controller implements Executable {
 				.charAt(5)));
 		instructionDecodeExecuteRegisters.setMemToReg(toBoolean(control
 				.charAt(6)));
+		instructionDecodeExecuteRegisters.setJump(toBoolean(control
+				.charAt(7)) || (instruction.getFunct() == Constants.JR_FUNC) );
+		instructionDecodeExecuteRegisters.setJumpRegister(instruction.getFunct() == Constants.JR_FUNC);
 		instructionDecodeExecuteRegisters.setAluOpt(aluOp);
 	}
 
@@ -95,8 +100,11 @@ public class Controller implements Executable {
 			aluOp = 4;
 			break;
 		case Constants.J_OPCODE:
+			control = jControls;
+			aluOp = 3;
+			break;
 		case Constants.JAL_OPCODE:
-			control = jformatControls;
+			control = jalControls;
 			aluOp = 3;
 			break;
 		}

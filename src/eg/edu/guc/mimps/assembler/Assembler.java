@@ -287,7 +287,7 @@ public class Assembler {
 			throw new SyntaxErrorException("No label matches " + label, line);
 		}
 		Instruction instruction = new Instruction();
-		instruction.setJumpAddress(labels.get(label));
+		instruction.setJumpAddress(labels.get(label)/4);
 		instruction.setOpcode(opcodes.get(name));
 		return instruction;
 		
@@ -307,7 +307,6 @@ public class Assembler {
 	}
 	
 	private Instruction decodeIInstruction(String name, int rt, int rs, int address, int line) throws SyntaxErrorException {
-		System.out.println(name);
 		Instruction instruction = new Instruction();
 		instruction.setOpcode(opcodes.get(name));
 		instruction.setRt(rt);

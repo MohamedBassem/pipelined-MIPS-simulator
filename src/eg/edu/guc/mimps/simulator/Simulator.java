@@ -2,6 +2,8 @@ package eg.edu.guc.mimps.simulator;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.sun.org.apache.bcel.internal.generic.NOP;
 
@@ -74,6 +76,7 @@ public class Simulator {
 		done = false;
 
 		cycles = 0;
+		pc = 0;
 
 		this.memory = new Memory();
 		this.registers = new Registers();
@@ -94,7 +97,10 @@ public class Simulator {
 		this.pc = origin;
 		assembler = new Assembler(origin, new StringReader(code),
 				instructionFetchDecodeRegisters);
-		assembler.assemble();
+		Map<Integer, Integer> data = assembler.assemble();
+		for(Integer address : data.keySet()){
+			memory.put(address, data.get(address));
+		}
 		return true;
 	}
 
@@ -122,24 +128,31 @@ public class Simulator {
 		dataMemory.write();
 		cycles++;
 		gui.update();
-		System.out.println(memory);
-		if (executeMemoryRegisters.isBranch()
-				&& executeMemoryRegisters.isZero()) {
+		
+		
+		if(!done){
+			pc += 4;
+		}
+		
+		if(executeMemoryRegisters.isBranch() && executeMemoryRegisters.isZero()){
 			pc = executeMemoryRegisters.getBranchAddress();
 			NOPcount = 0;
 			done = false;
-		} else {
-			if (!done) {
-				pc += 4;
-			}
+		}
+		
+		if(executeMemoryRegisters.isJump()){
+			
+			pc = executeMemoryRegisters.getJumpAddress();
+			NOPcount = 0;
+			done = false;
 		}
 		gui.update();
 		return true;
 	}
-
-	public void run() {
-		while (cycles < 10000) {
-			if (!step()) {
+	
+	public void run(){
+		while(cycles < 1000000){
+			if(!step()){
 				break;
 			}
 		}

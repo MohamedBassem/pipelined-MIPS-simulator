@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 public class InstructionDecodeExecuteRegisters {
 	private int incrementedPc;
+	private int jumpAddress;
 	private int register1Value;
 	private int register2Value;
 	private int signExtendedOffset;
@@ -15,7 +16,9 @@ public class InstructionDecodeExecuteRegisters {
 	private boolean aluSrc;
 	private boolean regDest;
 	private int aluOpt;
-	
+	private boolean jump;
+	private boolean jumpRegister;
+
 	// Memory Phase Signals
 	private boolean memRead;
 	private boolean memWrite;
@@ -116,8 +119,24 @@ public class InstructionDecodeExecuteRegisters {
 	public void setShamt(int shamt) {
 		this.shamt = shamt;
 	}
-	
-	
+	public boolean isJump() {
+		return jump;
+	}
+	public void setJump(boolean jump) {
+		this.jump = jump;
+	}
+	public int getJumpAddress() {
+		return jumpAddress;
+	}
+	public void setJumpAddress(int jumpAddress) {
+		this.jumpAddress = jumpAddress;
+	}
+	public boolean isJumpRegister() {
+		return jumpRegister;
+	}
+	public void setJumpRegister(boolean jumpRegister) {
+		this.jumpRegister = jumpRegister;
+	}
 	public InstructionDecodeExecuteRegisters clone(){
 		InstructionDecodeExecuteRegisters clone = new InstructionDecodeExecuteRegisters();
 		clone.setAluOpt(aluOpt);
@@ -135,6 +154,9 @@ public class InstructionDecodeExecuteRegisters {
 		clone.setRt(rt);
 		clone.setSignExtendedOffset(signExtendedOffset);
 		clone.setShamt(shamt);
+		clone.setJump(jump);
+		clone.setJumpAddress(jumpAddress);
+		clone.setJumpRegister(jumpRegister);
 		return clone;
 	}
 	
@@ -146,6 +168,7 @@ public class InstructionDecodeExecuteRegisters {
 		this.setRegister2Value(instructionDecodeExecuteRegisters.getRegister2Value());
 		this.setSignExtendedOffset(instructionDecodeExecuteRegisters.getSignExtendedOffset());
 		this.setShamt(instructionDecodeExecuteRegisters.getShamt());
+		this.setJumpAddress(instructionDecodeExecuteRegisters.getJumpAddress());
 	}
 	
 	public void replaceControll(InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters){
@@ -157,6 +180,8 @@ public class InstructionDecodeExecuteRegisters {
 		this.setMemWrite(instructionDecodeExecuteRegisters.isMemWrite());
 		this.setRegDest(instructionDecodeExecuteRegisters.isRegDest());
 		this.setRegWrite(instructionDecodeExecuteRegisters.isRegWrite());
+		this.setJump(instructionDecodeExecuteRegisters.isJump());
+		this.setJumpRegister(instructionDecodeExecuteRegisters.isJumpRegister());
 	}
 	
 	public String toString() {
@@ -187,6 +212,7 @@ public class InstructionDecodeExecuteRegisters {
 
 		  return result.toString();
 		}
+	
 	
 
 }

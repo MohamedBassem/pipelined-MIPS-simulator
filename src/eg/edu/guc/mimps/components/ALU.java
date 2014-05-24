@@ -32,7 +32,7 @@ public class ALU implements Executable {
 
 	public void execute() {
 		int aluOpt = decodeExecuteRegister.getAluOpt();
-		int functionCode = BinaryManiplator.getPartialValue(decodeExecuteRegister.getSignExtendedOffset(), 0, 5);
+		int functionCode = BinaryManiplator.getUnsignedPartialValue(decodeExecuteRegister.getSignExtendedOffset(), 0, 5);
 		
 		int aluOperation = 0;
 		
@@ -88,7 +88,7 @@ public class ALU implements Executable {
 			case SLT : aluResult = setLessThan(first, second);break;
 			case SLTU: aluResult = setLessThanUnsigned(first, second);break;
 		}
-		
+
 		boolean zero = false;
 		if(aluOpt == 1){
 			zero = (aluResult == 0);
@@ -100,12 +100,25 @@ public class ALU implements Executable {
 		newExecuteMemoryRegister.setZero(zero);
 		newExecuteMemoryRegister.setBranchAddress(decodeExecuteRegister.getIncrementedPc() + decodeExecuteRegister.getSignExtendedOffset()*4);
 		newExecuteMemoryRegister.setRegisterValueToMemory(decodeExecuteRegister.getRegister2Value());
-		if(decodeExecuteRegister.isRegDest()){
+		newExecuteMemoryRegister.setALUResult(aluResult);
+		// If jal
+		if(decodeExecuteRegister.isJump() && decodeExecuteRegister.isRegWrite()){
+			newExecuteMemoryRegister.setWriteBackRegister(31);
+			newExecuteMemoryRegister.setALUResult(decodeExecuteRegister.getIncrementedPc());
+		}else if(decodeExecuteRegister.isRegDest()){
 			newExecuteMemoryRegister.setWriteBackRegister(decodeExecuteRegister.getRd());
 		}else{
 			newExecuteMemoryRegister.setWriteBackRegister(decodeExecuteRegister.getRt());
 		}
-		newExecuteMemoryRegister.setALUResult(aluResult);
+		newExecuteMemoryRegister.setJump(decodeExecuteRegister.isJump());
+		if(decodeExecuteRegister.isJumpRegister()){
+			newExecuteMemoryRegister.setJumpAddress(decodeExecuteRegister.getRegister1Value());
+		}else{
+			int newPc = decodeExecuteRegister.getIncrementedPc();
+			newPc &= 0xF0000000;
+			newExecuteMemoryRegister.setJumpAddress(newPc | (decodeExecuteRegister.getJumpAddress() << 2));
+		}
+		newExecuteMemoryRegister.setIncrementedPc(decodeExecuteRegister.getIncrementedPc());
 		newExecuteMemoryRegister.setMemRead(decodeExecuteRegister.isMemRead());
 		newExecuteMemoryRegister.setMemWrite(decodeExecuteRegister.isMemWrite());
 		newExecuteMemoryRegister.setBranch(decodeExecuteRegister.isBranch());
