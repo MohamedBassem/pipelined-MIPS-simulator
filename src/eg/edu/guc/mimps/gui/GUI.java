@@ -96,18 +96,18 @@ public class GUI {
 
 	private JMenuBar getMenuBar() {
 		mb = new JMenuBar();
-		final JMenuItem run = new JMenuItem(new ImageIcon("run.png"));
+		final JMenuItem run = new JMenuItem(new ImageIcon("images/run.png"));
 		run.setMaximumSize(new Dimension(70, 100));
-		run.setDisabledIcon(new ImageIcon("run_disabled.png"));
-		final JMenuItem runStep = new JMenuItem(new ImageIcon("run_step.png"));
-		runStep.setDisabledIcon(new ImageIcon("run_step_disabled.png"));
+		run.setDisabledIcon(new ImageIcon("images/run_disabled.png"));
+		final JMenuItem runStep = new JMenuItem(new ImageIcon("images/run_step.png"));
+		runStep.setDisabledIcon(new ImageIcon("images/run_step_disabled.png"));
 		runStep.setMaximumSize(new Dimension(70, 100));
-		JMenuItem save = new JMenuItem(new ImageIcon("save.png"));
+		JMenuItem save = new JMenuItem(new ImageIcon("images/save.png"));
 		save.setMaximumSize(new Dimension(70, 100));
-		JMenuItem open = new JMenuItem(new ImageIcon("open.png"));
+		JMenuItem open = new JMenuItem(new ImageIcon("images/open.png"));
 		open.setMaximumSize(new Dimension(70, 100));
-		final JMenuItem assemble = new JMenuItem(new ImageIcon("assemble.png"));
-		assemble.setDisabledIcon(new ImageIcon("assemble_disabled.png"));
+		final JMenuItem assemble = new JMenuItem(new ImageIcon("images/assemble.png"));
+		assemble.setDisabledIcon(new ImageIcon("images/assemble_disabled.png"));
 		assemble.setMaximumSize(new Dimension(70, 100));
 		run.setEnabled(false);
 		runStep.setEnabled(false);
