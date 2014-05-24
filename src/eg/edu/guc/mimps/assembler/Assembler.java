@@ -378,6 +378,8 @@ public class Assembler {
 		opcodes.put(Constants.JR, Constants.JR_OPCODE);
 		
 		functionCodes.put(Constants.ADD, Constants.ADD_FUNC);
+		functionCodes.put(Constants.AND, Constants.AND_FUNC);
+		functionCodes.put(Constants.OR, Constants.OR_FUNC);
 		functionCodes.put(Constants.NOR, Constants.NOR_FUNC);
 		functionCodes.put(Constants.SLL, Constants.SLL_FUNC);
 		functionCodes.put(Constants.SUB, Constants.SUB_FUNC);
