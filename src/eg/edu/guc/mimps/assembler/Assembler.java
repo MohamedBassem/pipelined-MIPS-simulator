@@ -329,7 +329,7 @@ public class Assembler {
 				"$t8", "$t9", "$k0", "$k1", "$gp", "$sp", "$fp", "$ra" };
 		for(int i=0;i<registersNames.length;i++){
 			registers.put(i+"", i);
-			registers.put(registersNames[i], i);
+			registers.put(registersNames[i].substring(1), i);
 		}
 		
 		
