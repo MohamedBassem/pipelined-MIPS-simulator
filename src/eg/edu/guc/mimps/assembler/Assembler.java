@@ -63,10 +63,12 @@ public class Assembler {
 	
 	public boolean execute(int pc) {
 		if (!instructions.containsKey(pc)) {
+			currentInstruction = new Instruction();
 			return false;
 		}
 		this.pc = pc;
 		currentInstruction = instructions.get(pc);
+		//System.out.println(currentInstruction.toInt());
 		return true;
 	}
 	
@@ -187,7 +189,7 @@ public class Assembler {
 				if (!types.containsKey(matcher.group(1)) || !types.get(matcher.group(1)).equals("BRANCHES")) {
 					throw new SyntaxErrorException("Invalid instruction", line);
 				}
-				int relativeAddress = (labels.get(matcher.group(4)) - cursor) / 4;
+				int relativeAddress = (labels.get(matcher.group(4)) - cursor - 4) / 4;
 				
 				result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line),  getRegisterNumber(matcher.group(3), line), relativeAddress, line);
 			}
