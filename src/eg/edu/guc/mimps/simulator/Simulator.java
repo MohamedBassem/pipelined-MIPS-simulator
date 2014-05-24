@@ -35,7 +35,6 @@ public class Simulator {
 	private Memory memory;
 	private Registers registers;
 	
-	private int lastPc;
 	private int NOPcount;
 	boolean done;
 	
@@ -54,7 +53,6 @@ public class Simulator {
 		executeMemoryRegisters = new ExecuteMemoryRegisters();
 		memoryWritebackRegisters = new MemoryWritebackRegisters();
 		
-		lastPc = -1;
 		NOPcount = 0;
 		done = false;
 		
@@ -77,15 +75,11 @@ public class Simulator {
 	}
 	
 	public boolean step(){
+		System.out.println(pc/4);
 		if(!assembler.execute(pc)){
 			if(NOPcount == 0){
-				lastPc = pc;
 				done = true;
 				NOPcount++;
-			}else if( NOPcount > 0 && lastPc != pc ){
-				NOPcount = 0;
-				done = false;
-				lastPc = -1;
 			}else if(NOPcount == 6){
 				return false;
 			}else{
@@ -106,8 +100,10 @@ public class Simulator {
 		
 		gui.update();
 		
-		if(executeMemoryRegisters.isBranch() && !executeMemoryRegisters.isZero()){
+		if(executeMemoryRegisters.isBranch() && executeMemoryRegisters.isZero()){
 			pc = executeMemoryRegisters.getBranchAddress();
+			NOPcount = 0;
+			done = false;
 		}else{
 			if(!done){
 				pc += 4;
