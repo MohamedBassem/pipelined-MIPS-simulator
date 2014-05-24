@@ -53,6 +53,7 @@ public class AssemblyDocument extends DefaultStyledDocument {
 		registersKeywords = new Hashtable();
 		for (int i = 0; i < registers.length; i++) {
 			registersKeywords.put(registers[i], new Object());
+			registersKeywords.put("$"+i, new Object());
 		}
 
 		String[] instructions = { "add", "addi", "sub", "lw", "sw", "sll",
