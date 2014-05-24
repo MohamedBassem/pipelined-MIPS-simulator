@@ -76,7 +76,7 @@ public class Assembler {
 	
 	public void print() {
 		for (Integer key : instructions.keySet()) {
-			System.out.println(key + " : " + instructions.get(key).getConstant());
+			System.out.println(key + " : " + instructions.get(key).toString());
 		}
 	}
 	
