@@ -292,17 +292,7 @@ public class Assembler {
 		if (registers.containsKey(register)) {
 			result = registers.get(register);
 		} else {
-			try {
-				char prefix = register.charAt(0);
-				register = register.substring(1);
-				int number = Integer.parseInt(register);
-				if (!registerPrefix.containsKey(prefix)) {
-					throw new SyntaxErrorException(line);
-				}
-				result = registerPrefix.get(prefix) + number;
-			} catch (Exception ex) {
-				throw new SyntaxErrorException("Invlid register name", line);
-			}
+			throw new SyntaxErrorException("Invlid register name", line);
 		}
 		return result;
 }
@@ -331,24 +321,15 @@ public class Assembler {
 	}
 	
 	private void initRegisters() {
-		registerPrefix = new HashMap<Character, Integer>();
 		registers = new HashMap<String, Integer>();
-		registerPrefix.put('t', 8);
-		registerPrefix.put('v', 6);
-		registerPrefix.put('s', 18);
-		registerPrefix.put('a', 2);
-		registerPrefix.put('k', 26);
-		registers.put("zero", 0);
-		registers.put("0", 0);
-		registers.put("at", 1);
-		registers.put("gp", 28);
-		registers.put("sp", 29);
-		registers.put("fp", 30);
-		registers.put("ra", 31);
-		for(int i=0;i<=31;i++){
+		String[] registersNames = { "$zero", "$at", "$v0", "$v1", "$a0", "$a1",
+				"$a2", "$a3", "$t0", "$t1", "$t2", "$t3", "$t4", "$t5", "$t6",
+				"$t7", "$s0", "$s1", "$s2", "$s3", "$s4", "$s5", "$s6", "$s7",
+				"$t8", "$t9", "$k0", "$k1", "$gp", "$sp", "$fp", "$ra" };
+		for(int i=0;i<registersNames.length;i++){
 			registers.put(i+"", i);
+			registers.put(registersNames[i].substring(1), i);
 		}
-		
 		
 	}
 	
@@ -378,6 +359,8 @@ public class Assembler {
 		opcodes.put(Constants.JR, Constants.JR_OPCODE);
 		
 		functionCodes.put(Constants.ADD, Constants.ADD_FUNC);
+		functionCodes.put(Constants.AND, Constants.AND_FUNC);
+		functionCodes.put(Constants.OR, Constants.OR_FUNC);
 		functionCodes.put(Constants.NOR, Constants.NOR_FUNC);
 		functionCodes.put(Constants.SLL, Constants.SLL_FUNC);
 		functionCodes.put(Constants.SUB, Constants.SUB_FUNC);

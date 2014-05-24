@@ -16,27 +16,27 @@ public class Instruction {
 	}
 	
 	public int getOpcode() {
-		return BinaryManiplator.getPartialValue(instruction, 26, 31);
+		return BinaryManiplator.getUnsignedPartialValue(instruction, 26, 31);
 	}
 	
 	public int getRs() {
-		return BinaryManiplator.getPartialValue(instruction, 21, 25);
+		return BinaryManiplator.getUnsignedPartialValue(instruction, 21, 25);
 	}
 	
 	public int getRd() {
-		return BinaryManiplator.getPartialValue(instruction, 11, 15);
+		return BinaryManiplator.getUnsignedPartialValue(instruction, 11, 15);
 	}
 	
 	public int getRt() {	
-		return BinaryManiplator.getPartialValue(instruction, 16, 20);
+		return BinaryManiplator.getUnsignedPartialValue(instruction, 16, 20);
 	}
 	
 	public int getShamt() {
-		return BinaryManiplator.getPartialValue(instruction, 6, 10);
+		return BinaryManiplator.getUnsignedPartialValue(instruction, 6, 10);
 	}
 	
 	public int getFunct() {
-		return BinaryManiplator.getPartialValue(instruction, 0, 5);
+		return BinaryManiplator.getUnsignedPartialValue(instruction, 0, 5);
 	}
 	
 	protected void setFunct(int funct) {
@@ -73,7 +73,7 @@ public class Instruction {
 	}
 	
 	public int getJumpAddress() {
-		return BinaryManiplator.getPartialValue(instruction, 0, 25);
+		return BinaryManiplator.getUnsignedPartialValue(instruction, 0, 25);
 	}
 	
 	protected void setJumpAddress(int jumpAddress) {
