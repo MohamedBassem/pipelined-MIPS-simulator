@@ -112,7 +112,6 @@ public class ALU implements Executable {
 		}
 		newExecuteMemoryRegister.setJump(decodeExecuteRegister.isJump());
 		if(decodeExecuteRegister.isJumpRegister()){
-			System.out.println("HE");
 			newExecuteMemoryRegister.setJumpAddress(decodeExecuteRegister.getRegister1Value());
 		}else{
 			int newPc = decodeExecuteRegister.getIncrementedPc();
