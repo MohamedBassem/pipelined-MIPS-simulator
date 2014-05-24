@@ -8,6 +8,9 @@ public class ExecuteMemoryRegisters {
 	private int ALUResult;
 	private int registerValueToMemory;
 	private int writeBackRegister;
+	private int incrementedPc;
+	private boolean jump;
+	private int jumpAddress;
 	
 	// Memory Phase Signals
 	private boolean memRead;
@@ -78,6 +81,24 @@ public class ExecuteMemoryRegisters {
 	public void setMemToReg(boolean memToReg) {
 		this.memToReg = memToReg;
 	}
+	public int getJumpAddress() {
+		return jumpAddress;
+	}
+	public void setJumpAddress(int jumpAddress) {
+		this.jumpAddress = jumpAddress;
+	}
+	public boolean isJump() {
+		return jump;
+	}
+	public void setJump(boolean jump) {
+		this.jump = jump;
+	}
+	public int getIncrementedPc() {
+		return incrementedPc;
+	}
+	public void setIncrementedPc(int incrementedPc) {
+		this.incrementedPc = incrementedPc;
+	}
 	
 	public ExecuteMemoryRegisters clone(){
 		ExecuteMemoryRegisters clone = new ExecuteMemoryRegisters();
@@ -91,6 +112,9 @@ public class ExecuteMemoryRegisters {
 		clone.setWriteBackRegister(writeBackRegister);
 		clone.setZero(zero);
 		clone.setRegWrite(regWrite);
+		clone.setJump(jump);
+		clone.setJumpAddress(jumpAddress);
+		clone.setIncrementedPc(incrementedPc);
 		return clone;
 	}
 	
@@ -105,6 +129,9 @@ public class ExecuteMemoryRegisters {
 		this.setWriteBackRegister(executeMemoryRegisters.getWriteBackRegister());
 		this.setZero(executeMemoryRegisters.isZero());
 		this.setRegWrite(executeMemoryRegisters.isRegWrite());
+		this.setJump(executeMemoryRegisters.isJump());
+		this.setJumpAddress(executeMemoryRegisters.getJumpAddress());
+		this.setIncrementedPc(executeMemoryRegisters.getIncrementedPc());
 	}
 	
 	public String toString() {
@@ -135,5 +162,7 @@ public class ExecuteMemoryRegisters {
 
 		  return result.toString();
 		}
+	
+	
 		
 }

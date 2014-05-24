@@ -17,6 +17,7 @@ public class InstructionDecodeExecuteRegisters {
 	private boolean regDest;
 	private int aluOpt;
 	private boolean jump;
+	private boolean jumpRegister;
 
 	// Memory Phase Signals
 	private boolean memRead;
@@ -130,7 +131,12 @@ public class InstructionDecodeExecuteRegisters {
 	public void setJumpAddress(int jumpAddress) {
 		this.jumpAddress = jumpAddress;
 	}
-	
+	public boolean isJumpRegister() {
+		return jumpRegister;
+	}
+	public void setJumpRegister(boolean jumpRegister) {
+		this.jumpRegister = jumpRegister;
+	}
 	public InstructionDecodeExecuteRegisters clone(){
 		InstructionDecodeExecuteRegisters clone = new InstructionDecodeExecuteRegisters();
 		clone.setAluOpt(aluOpt);
@@ -150,6 +156,7 @@ public class InstructionDecodeExecuteRegisters {
 		clone.setShamt(shamt);
 		clone.setJump(jump);
 		clone.setJumpAddress(jumpAddress);
+		clone.setJumpRegister(jumpRegister);
 		return clone;
 	}
 	
@@ -174,6 +181,7 @@ public class InstructionDecodeExecuteRegisters {
 		this.setRegDest(instructionDecodeExecuteRegisters.isRegDest());
 		this.setRegWrite(instructionDecodeExecuteRegisters.isRegWrite());
 		this.setJump(instructionDecodeExecuteRegisters.isJump());
+		this.setJumpRegister(instructionDecodeExecuteRegisters.isJumpRegister());
 	}
 	
 	public String toString() {
@@ -204,6 +212,7 @@ public class InstructionDecodeExecuteRegisters {
 
 		  return result.toString();
 		}
+	
 	
 
 }

@@ -287,7 +287,7 @@ public class Assembler {
 			throw new SyntaxErrorException("No label matches " + label, line);
 		}
 		Instruction instruction = new Instruction();
-		instruction.setJumpAddress(labels.get(label));
+		instruction.setJumpAddress(labels.get(label)/4);
 		instruction.setOpcode(opcodes.get(name));
 		return instruction;
 		

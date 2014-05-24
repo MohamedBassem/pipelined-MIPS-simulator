@@ -135,10 +135,9 @@ public class Simulator {
 			done = false;
 		}
 		
-		if(instructionDecodeExecuteRegisters.isJump()){
-			int newPc = instructionDecodeExecuteRegisters.getIncrementedPc();
-			newPc &= 0xF0000000;
-			pc = newPc | (instructionDecodeExecuteRegisters.getJumpAddress() << 2);
+		if(executeMemoryRegisters.isJump()){
+			
+			pc = executeMemoryRegisters.getJumpAddress();
 			NOPcount = 0;
 			done = false;
 		}

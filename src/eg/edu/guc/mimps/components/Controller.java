@@ -17,6 +17,7 @@ public class Controller implements Executable {
 	private String branchControls = "X01000X0";
 	private String control;
 	private int aluOp;
+	private Instruction instruction;
 
 	public Controller(
 			InstructionFetchDecodeRegisters instructionFetchDecodeRegisters,
@@ -30,7 +31,7 @@ public class Controller implements Executable {
 	public void execute() {
 		int instructionNumber = instructionFetchDecodeRegisters
 				.getInstruction();
-		Instruction instruction = new Instruction(instructionNumber);
+		this.instruction = new Instruction(instructionNumber);
 		aluOp = this.toInstructionType(instruction.getOpcode());
 
 	}
@@ -52,7 +53,8 @@ public class Controller implements Executable {
 		instructionDecodeExecuteRegisters.setMemToReg(toBoolean(control
 				.charAt(6)));
 		instructionDecodeExecuteRegisters.setJump(toBoolean(control
-				.charAt(7)));
+				.charAt(7)) || (instruction.getFunct() == Constants.JR_FUNC) );
+		instructionDecodeExecuteRegisters.setJumpRegister(instruction.getFunct() == Constants.JR_FUNC);
 		instructionDecodeExecuteRegisters.setAluOpt(aluOp);
 	}
 
