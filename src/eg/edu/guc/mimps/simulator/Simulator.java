@@ -2,6 +2,8 @@ package eg.edu.guc.mimps.simulator;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.sun.org.apache.bcel.internal.generic.NOP;
 
@@ -95,7 +97,10 @@ public class Simulator {
 		this.pc = origin;
 		assembler = new Assembler(origin, new StringReader(code),
 				instructionFetchDecodeRegisters);
-		assembler.assemble();
+		Map<Integer, Integer> data = assembler.assemble();
+		for(Integer address : data.keySet()){
+			memory.put(address, data.get(address));
+		}
 		return true;
 	}
 
