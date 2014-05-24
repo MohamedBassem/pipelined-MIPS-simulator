@@ -101,6 +101,7 @@ public class Simulator {
 		for(Integer address : data.keySet()){
 			memory.put(address, data.get(address));
 		}
+		gui.update();
 		return true;
 	}
 
