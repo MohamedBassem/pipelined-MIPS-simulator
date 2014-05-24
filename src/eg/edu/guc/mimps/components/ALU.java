@@ -11,16 +11,16 @@ public class ALU implements Executable {
 	ExecuteMemoryRegisters executeMemoryRegister;
 	ExecuteMemoryRegisters newExecuteMemoryRegister;
 	
-	private final static int AND  = 0b0000;
-	private final static int OR   =  0b0001;
-	private final static int ADD  = 0b0010;
-	private final static int SUB  = 0b0110;
-	private final static int SLT  = 0b0111;
+	private final static int AND  = 0;
+	private final static int OR   = 1;
+	private final static int ADD  = 2;
+	private final static int SUB  = 6;
+	private final static int SLT  = 7;
 	
-	private final static int SLL  = 0b0011;
-	private final static int SRL  = 0b0100;
-	private final static int NOR  = 0b0101;
-	private final static int SLTU = 0b1000;
+	private final static int SLL  = 3;
+	private final static int SRL  = 4;
+	private final static int NOR  = 5;
+	private final static int SLTU = 8;
 	
 	public ALU(
 			InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters,
