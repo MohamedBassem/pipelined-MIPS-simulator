@@ -86,18 +86,19 @@ public class Simulator {
 				NOPcount = 0;
 				done = false;
 				lastPc = -1;
-			}else if(NOPcount == 5){
+			}else if(NOPcount == 6){
 				return false;
 			}else{
 				NOPcount++;
 			}
 		}
+		assembler.write();
 		registerFile.execute();
 		controller.execute();
 		alu.execute();
 		dataMemory.execute();
 		
-		assembler.write();
+		
 		registerFile.write();
 		controller.write();
 		alu.write();
@@ -130,5 +131,13 @@ public class Simulator {
 	
 	public static void main(String[] args) {
 		new Simulator();
+	}
+	
+	public Registers getRegisters(){
+		return registers;
+	}
+	
+	public Memory getMemory(){
+		return memory;
 	}
 }

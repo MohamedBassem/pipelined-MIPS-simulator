@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -34,8 +35,6 @@ import eg.edu.guc.mimps.simulator.Simulator;
 
 public class GUI {
 	Simulator simulator;
-	Memory memory;
-	Registers registers;
 	JFrame mainFrame;
 	JTable registersTable;
 	JTable memoryTable;
@@ -45,8 +44,8 @@ public class GUI {
 
 	public GUI(Simulator simulator, Memory memory, Registers registers) {
 		this.simulator = simulator;
-		this.memory = memory;
-		this.registers = registers;
+		startFrame();
+		update();
 	}
 
 	public void startFrame() {
@@ -111,7 +110,9 @@ public class GUI {
 				run.setEnabled(false);
 				runStep.setEnabled(false);
 				assemble.setEnabled(true);
-				editor.getHighlighter().removeAllHighlights();		
+				editor.getHighlighter().removeAllHighlights();
+				simulator.reset();
+				update();
 			}
 			
 			@Override
@@ -253,7 +254,13 @@ public class GUI {
 				"Address");
 		for (int i = 1; i < 9; i++) {
 			memoryTable.getColumn(memoryTable.getColumnName(i)).setHeaderValue(
-					"Value (+" + (i-1)*4 + ")");
+					"Value (+" + (i - 1) * 4 + ")");
+		}
+		Set<Integer> keys = simulator.getMemory().keySet();
+		int i = 0;
+		for (Integer key : keys) {
+			memoryTable.setValueAt(key, i, 0);
+			i++;
 		}
 		memoryTable.setEnabled(false);
 		JScrollPane scroll = new JScrollPane(memoryTable);
@@ -263,9 +270,24 @@ public class GUI {
 
 	public void update() {
 		for (int i = 0; i < 32; i++) {
-			registersTable.setValueAt(registers.getReg(i), i, 2);
+			registersTable.setValueAt(simulator.getRegisters().getReg(i), i, 2);
 		}
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
+
+		for (int j = 0; j < 10; j++) {
+			memoryTable.setValueAt(
+					simulator.getMemory().get(memoryTable.getValueAt(j, 0)), j,
+					1);
+			if (simulator.getMemory().get(memoryTable.getValueAt(j, 0)) != null) {
+				for (int k = 2; k < 9; k++) {
+					memoryTable.setValueAt(
+							simulator.getMemory().get(
+									memoryTable.getValueAt(j, 0))
+									+ (k - 1) * 4, j, k);
+				}
+			}
+			continue;
+		}
 	}
 
 

@@ -1,5 +1,7 @@
 package eg.edu.guc.mimps.registers;
 
+import java.lang.reflect.Field;
+
 public class Registers {
 	private int[] registers;
 	
@@ -13,6 +15,14 @@ public class Registers {
 	
 	public void setReg(int reg, int data) {
 		registers[reg] = data;
+	}
+	
+	public String toString() {
+		String ret = "{\n";
+		 for(int i=0;i<31;i++)
+			 ret += "\t" + i + " : " + registers[i] + "\n";
+		ret += "}";
+		return ret;
 	}
 
 }
