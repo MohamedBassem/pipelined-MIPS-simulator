@@ -53,8 +53,8 @@ public class Controller implements Executable {
 		instructionDecodeExecuteRegisters.setMemToReg(toBoolean(control
 				.charAt(6)));
 		instructionDecodeExecuteRegisters.setJump(toBoolean(control
-				.charAt(7)) || (instruction.getFunct() == Constants.JR_FUNC) );
-		instructionDecodeExecuteRegisters.setJumpRegister(instruction.getFunct() == Constants.JR_FUNC);
+				.charAt(7)) || (instruction.getOpcode() == 0 && instruction.getFunct() == Constants.JR_FUNC) );
+		instructionDecodeExecuteRegisters.setJumpRegister(instruction.getOpcode() == 0 && instruction.getFunct() == Constants.JR_FUNC);
 		instructionDecodeExecuteRegisters.setAluOpt(aluOp);
 	}
 
