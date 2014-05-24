@@ -46,23 +46,24 @@ public class RegisterFile implements Executable {
 		newIDER.setSignExtendedOffset(signExtend(constant));
 		newIDER.setRd(rd);
 		newIDER.setRt(rt);
-		newIDER.setRegister1Value(registers.getReg(rs));
-		newIDER.setRegister2Value(registers.getReg(rt));
 		newIDER.setIncrementedPc(instructionFetchDecodeRegisters.getIncrementedPc());
 		newIDER.setShamt(instruction.getShamt());
 		
-		if(instructionDecodeExecuteRegisters.isRegWrite()) {
+		if(memoryWritebackRegisters.isRegWrite()) {
 			int data = memoryWritebackRegisters.getALUResult();
 			int writeTo = memoryWritebackRegisters.getWriteBackRegister();
-			if(writeTo == 0)
-				return;
-			if(instructionDecodeExecuteRegisters.isMemToReg()) {
-				data = memoryWritebackRegisters.getMemoryWord();
-				registers.setReg(writeTo, data);
-			}else {
-				registers.setReg(writeTo, data);
+			if(writeTo != 0){
+				if(memoryWritebackRegisters.isMemToReg()) {
+					data = memoryWritebackRegisters.getMemoryWord();
+					registers.setReg(writeTo, data);
+				}else {
+					registers.setReg(writeTo, data);
+				}
 			}
-		}	
+		}
+		
+		newIDER.setRegister1Value(registers.getReg(rs));
+		newIDER.setRegister2Value(registers.getReg(rt));
 	}
 
 	@Override

@@ -37,6 +37,7 @@ public class Simulator {
 	
 	private int NOPcount;
 	boolean done;
+	private int cycles;
 	
 	GUI gui;
 	
@@ -44,7 +45,7 @@ public class Simulator {
 	
 	public Simulator(){
 		this.reset();
-		gui = new GUI(this,memory,registers);
+		gui = new GUI(this);
 	}
 	
 	public void reset(){
@@ -55,6 +56,8 @@ public class Simulator {
 		
 		NOPcount = 0;
 		done = false;
+		
+		cycles = 0;
 		
 		this.memory = new Memory();
 		this.registers = new Registers();
@@ -75,7 +78,6 @@ public class Simulator {
 	}
 	
 	public boolean step(){
-		System.out.println(pc/4);
 		if(!assembler.execute(pc)){
 			if(NOPcount == 0){
 				done = true;
@@ -86,20 +88,20 @@ public class Simulator {
 				NOPcount++;
 			}
 		}
-		assembler.write();
+		
 		registerFile.execute();
 		controller.execute();
 		alu.execute();
 		dataMemory.execute();
 		
-		
+		assembler.write();
 		registerFile.write();
 		controller.write();
 		alu.write();
 		dataMemory.write();
-		
+		cycles++;
 		gui.update();
-		
+		System.out.println(memory);
 		if(executeMemoryRegisters.isBranch() && executeMemoryRegisters.isZero()){
 			pc = executeMemoryRegisters.getBranchAddress();
 			NOPcount = 0;
@@ -114,7 +116,7 @@ public class Simulator {
 	}
 	
 	public void run(){
-		while(true){
+		while(cycles < 10000){
 			if(!step()){
 				break;
 			}
@@ -135,5 +137,8 @@ public class Simulator {
 	
 	public Memory getMemory(){
 		return memory;
+	}
+	public int getCycles(){
+		return cycles;
 	}
 }

@@ -13,6 +13,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
 import eg.edu.guc.mimps.components.Executable;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
@@ -305,13 +307,12 @@ public class Assembler {
 	}
 	
 	private Instruction decodeIInstruction(String name, int rt, int rs, int address, int line) throws SyntaxErrorException {
-		
+		System.out.println(name);
 		Instruction instruction = new Instruction();
 		instruction.setOpcode(opcodes.get(name));
 		instruction.setRt(rt);
 		instruction.setRs(rs);
 		instruction.setConstant(address);
-		
 		return instruction;
 	}
 	
