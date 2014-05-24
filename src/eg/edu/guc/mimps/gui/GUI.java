@@ -41,8 +41,9 @@ public class GUI {
 	JTextPane editor = new JTextPane();
 	JMenuBar mb;
 	String code = "";
+	private DefaultTableModel memoryTableModel;
 
-	public GUI(Simulator simulator, Memory memory, Registers registers) {
+	public GUI(Simulator simulator) {
 		this.simulator = simulator;
 		startFrame();
 		update();
@@ -52,8 +53,8 @@ public class GUI {
 		mainFrame = new JFrame();
 		JMenuBar menu = getMenuBar();
 		mainFrame.setMinimumSize(new Dimension((int) Toolkit
-				.getDefaultToolkit().getScreenSize().getWidth()/2,
-				(int) Toolkit.getDefaultToolkit().getScreenSize().height/2));
+				.getDefaultToolkit().getScreenSize().getWidth()/2 - 200,
+				(int) Toolkit.getDefaultToolkit().getScreenSize().height/2 ));
 		mainFrame.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
 		mainFrame.setTitle("MIPS Simulator");
 		mainFrame.setJMenuBar(menu);
@@ -247,14 +248,14 @@ public class GUI {
 	}
 
 	private JScrollPane getMemoryTable() {
-		DefaultTableModel model = new DefaultTableModel(10, 9);
-		memoryTable = new JTable(model);
+		this.memoryTableModel = new DefaultTableModel(0, 2);
+		
+		memoryTable = new JTable(memoryTableModel);
 		memoryTable.getColumn(memoryTable.getColumnName(0)).setHeaderValue(
 				"Address");
-		for (int i = 1; i < 9; i++) {
-			memoryTable.getColumn(memoryTable.getColumnName(i)).setHeaderValue(
-					"Value (+" + (i - 1) * 4 + ")");
-		}
+	
+		memoryTable.getColumn(memoryTable.getColumnName(1)).setHeaderValue(
+					"Value");
 		Set<Integer> keys = simulator.getMemory().keySet();
 		int i = 0;
 		for (Integer key : keys) {
@@ -273,19 +274,14 @@ public class GUI {
 		}
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
 		registersTable.setValueAt(simulator.getCycles(), 33, 2);
-
-		for (int j = 0; j < 10; j++) {
+		memoryTableModel.setRowCount(simulator.getMemory().size());
+		Set<Integer> memoryKeys = simulator.getMemory().keySet();
+		int row = 0;
+		for (Integer address : memoryKeys) {
 			memoryTable.setValueAt(String.format("%08x",
-					simulator.getMemory().get(memoryTable.getValueAt(j, 0))), j,
-					1);
-			if (simulator.getMemory().get(memoryTable.getValueAt(j, 0)) != null) {
-				for (int k = 2; k < 9; k++) {
-					memoryTable.setValueAt(String.format("%08x",
-							(simulator.getMemory().get(
-									memoryTable.getValueAt(j, 0))
-									+ (k - 1) * 4)), j, k);
-				}
-			}
+					address), row,0);
+			memoryTable.setValueAt(simulator.getMemory().get(address), row++,1);
+			
 		}
 	}
 

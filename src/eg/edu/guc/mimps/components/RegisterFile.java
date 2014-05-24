@@ -53,7 +53,7 @@ public class RegisterFile implements Executable {
 			int data = memoryWritebackRegisters.getALUResult();
 			int writeTo = memoryWritebackRegisters.getWriteBackRegister();
 			if(writeTo != 0){
-				if(instructionDecodeExecuteRegisters.isMemToReg()) {
+				if(memoryWritebackRegisters.isMemToReg()) {
 					data = memoryWritebackRegisters.getMemoryWord();
 					registers.setReg(writeTo, data);
 				}else {

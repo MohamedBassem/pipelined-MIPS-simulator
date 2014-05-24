@@ -45,7 +45,7 @@ public class Simulator {
 	
 	public Simulator(){
 		this.reset();
-		gui = new GUI(this,memory,registers);
+		gui = new GUI(this);
 	}
 	
 	public void reset(){
@@ -78,7 +78,6 @@ public class Simulator {
 	}
 	
 	public boolean step(){
-		System.out.println(pc/4);
 		if(!assembler.execute(pc)){
 			if(NOPcount == 0){
 				done = true;
@@ -102,7 +101,7 @@ public class Simulator {
 		dataMemory.write();
 		cycles++;
 		gui.update();
-		
+		System.out.println(memory);
 		if(executeMemoryRegisters.isBranch() && executeMemoryRegisters.isZero()){
 			pc = executeMemoryRegisters.getBranchAddress();
 			NOPcount = 0;
