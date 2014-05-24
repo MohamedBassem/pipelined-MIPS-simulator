@@ -238,8 +238,7 @@ public class GUI {
 			registersTable.setValueAt(i, i, 1);
 		}
 		registersTable.setValueAt("pc", 32, 0);
-		registersTable.setValueAt("hi", 33, 0);
-		registersTable.setValueAt("lo", 34, 0);
+		registersTable.setValueAt("cycles", 33, 0);
 		registersTable.setEnabled(false);
 		JScrollPane scroll = new JScrollPane(registersTable);
 		scroll.setMinimumSize(new Dimension(400, Toolkit.getDefaultToolkit()
@@ -267,6 +266,7 @@ public class GUI {
 			registersTable.setValueAt(simulator.getRegisters().getReg(i), i, 2);
 		}
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
+		registersTable.setValueAt(simulator.getCycles(), 33, 2);
 	}
 
 }
