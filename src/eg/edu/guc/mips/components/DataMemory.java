@@ -1,10 +1,10 @@
-package eg.edu.guc.mimps.components;
+package eg.edu.guc.mips.components;
 
 import java.util.HashMap;
 
-import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
-import eg.edu.guc.mimps.registers.Memory;
-import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
+import eg.edu.guc.mips.registers.ExecuteMemoryRegisters;
+import eg.edu.guc.mips.registers.Memory;
+import eg.edu.guc.mips.registers.MemoryWritebackRegisters;
 
 public class DataMemory implements Executable {
 

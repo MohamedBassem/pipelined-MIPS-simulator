@@ -1,6 +1,6 @@
-package eg.edu.guc.mimps.utils;
+package eg.edu.guc.mips.utils;
 
-import eg.edu.guc.mimps.assembler.Instruction;
+import eg.edu.guc.mips.assembler.Instruction;
 
 public class BinaryManiplator {
 	

@@ -1,9 +1,9 @@
-package eg.edu.guc.mimps.components;
+package eg.edu.guc.mips.components;
 
-import eg.edu.guc.mimps.assembler.Instruction;
-import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
-import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
-import eg.edu.guc.mimps.utils.Constants;
+import eg.edu.guc.mips.assembler.Instruction;
+import eg.edu.guc.mips.registers.InstructionDecodeExecuteRegisters;
+import eg.edu.guc.mips.registers.InstructionFetchDecodeRegisters;
+import eg.edu.guc.mips.utils.Constants;
 
 public class Controller implements Executable {
 	private InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;

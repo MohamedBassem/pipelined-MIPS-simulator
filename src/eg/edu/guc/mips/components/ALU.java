@@ -1,9 +1,9 @@
-package eg.edu.guc.mimps.components;
+package eg.edu.guc.mips.components;
 
-import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
-import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
-import eg.edu.guc.mimps.utils.BinaryManiplator;
-import eg.edu.guc.mimps.utils.Constants;
+import eg.edu.guc.mips.registers.ExecuteMemoryRegisters;
+import eg.edu.guc.mips.registers.InstructionDecodeExecuteRegisters;
+import eg.edu.guc.mips.utils.BinaryManiplator;
+import eg.edu.guc.mips.utils.Constants;
 
 public class ALU implements Executable {
 

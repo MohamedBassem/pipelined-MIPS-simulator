@@ -1,4 +1,4 @@
-package eg.edu.guc.mimps.assembler;
+package eg.edu.guc.mips.assembler;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -15,11 +15,11 @@ import java.util.regex.Pattern;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
 
-import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
-import eg.edu.guc.mimps.components.Executable;
-import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
-import eg.edu.guc.mimps.utils.BinaryManiplator;
-import eg.edu.guc.mimps.utils.Constants;
+import eg.edu.guc.mips.components.Executable;
+import eg.edu.guc.mips.exceptions.SyntaxErrorException;
+import eg.edu.guc.mips.registers.InstructionFetchDecodeRegisters;
+import eg.edu.guc.mips.utils.BinaryManiplator;
+import eg.edu.guc.mips.utils.Constants;
 
 public class Assembler {
 	

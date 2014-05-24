@@ -1,4 +1,4 @@
-package eg.edu.guc.mimps.registers;
+package eg.edu.guc.mips.registers;
 
 import java.lang.reflect.Field;
 

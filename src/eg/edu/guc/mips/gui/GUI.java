@@ -1,4 +1,4 @@
-package eg.edu.guc.mimps.gui;
+package eg.edu.guc.mips.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,8 +31,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 
-import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
-import eg.edu.guc.mimps.simulator.Simulator;
+import eg.edu.guc.mips.exceptions.SyntaxErrorException;
+import eg.edu.guc.mips.simulator.Simulator;
 
 public class GUI {
 	Simulator simulator;

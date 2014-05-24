@@ -1,4 +1,4 @@
-package eg.edu.guc.mimps.simulator;
+package eg.edu.guc.mips.simulator;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -7,19 +7,19 @@ import java.util.Map;
 
 import com.sun.org.apache.bcel.internal.generic.NOP;
 
-import eg.edu.guc.mimps.assembler.Assembler;
-import eg.edu.guc.mimps.components.ALU;
-import eg.edu.guc.mimps.components.Controller;
-import eg.edu.guc.mimps.components.DataMemory;
-import eg.edu.guc.mimps.components.RegisterFile;
-import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
-import eg.edu.guc.mimps.gui.GUI;
-import eg.edu.guc.mimps.registers.ExecuteMemoryRegisters;
-import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
-import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
-import eg.edu.guc.mimps.registers.Memory;
-import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
-import eg.edu.guc.mimps.registers.Registers;
+import eg.edu.guc.mips.assembler.Assembler;
+import eg.edu.guc.mips.components.ALU;
+import eg.edu.guc.mips.components.Controller;
+import eg.edu.guc.mips.components.DataMemory;
+import eg.edu.guc.mips.components.RegisterFile;
+import eg.edu.guc.mips.exceptions.SyntaxErrorException;
+import eg.edu.guc.mips.gui.GUI;
+import eg.edu.guc.mips.registers.ExecuteMemoryRegisters;
+import eg.edu.guc.mips.registers.InstructionDecodeExecuteRegisters;
+import eg.edu.guc.mips.registers.InstructionFetchDecodeRegisters;
+import eg.edu.guc.mips.registers.Memory;
+import eg.edu.guc.mips.registers.MemoryWritebackRegisters;
+import eg.edu.guc.mips.registers.Registers;
 
 public class Simulator {
 

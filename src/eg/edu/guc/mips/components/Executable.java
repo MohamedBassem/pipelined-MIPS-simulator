@@ -1,4 +1,4 @@
-package eg.edu.guc.mimps.components;
+package eg.edu.guc.mips.components;
 
 public interface Executable {
 	public void execute();

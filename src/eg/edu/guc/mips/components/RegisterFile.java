@@ -1,10 +1,10 @@
-package eg.edu.guc.mimps.components;
+package eg.edu.guc.mips.components;
 
-import eg.edu.guc.mimps.assembler.Instruction;
-import eg.edu.guc.mimps.registers.InstructionDecodeExecuteRegisters;
-import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
-import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
-import eg.edu.guc.mimps.registers.Registers;
+import eg.edu.guc.mips.assembler.Instruction;
+import eg.edu.guc.mips.registers.InstructionDecodeExecuteRegisters;
+import eg.edu.guc.mips.registers.InstructionFetchDecodeRegisters;
+import eg.edu.guc.mips.registers.MemoryWritebackRegisters;
+import eg.edu.guc.mips.registers.Registers;
 
 public class RegisterFile implements Executable {
 

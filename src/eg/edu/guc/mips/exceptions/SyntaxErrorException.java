@@ -1,4 +1,4 @@
-package eg.edu.guc.mimps.exceptions;
+package eg.edu.guc.mips.exceptions;
 
 public class SyntaxErrorException extends Exception {
 

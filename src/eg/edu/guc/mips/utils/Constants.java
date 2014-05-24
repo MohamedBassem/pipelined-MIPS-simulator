@@ -1,4 +1,4 @@
-package eg.edu.guc.mimps.utils;
+package eg.edu.guc.mips.utils;
 
 public class Constants {
 

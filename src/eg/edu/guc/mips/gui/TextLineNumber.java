@@ -1,4 +1,4 @@
-package eg.edu.guc.mimps.gui;
+package eg.edu.guc.mips.gui;
 
 import java.awt.*;
 import java.awt.event.*;
