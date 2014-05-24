@@ -13,6 +13,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
 import eg.edu.guc.mimps.components.Executable;
 import eg.edu.guc.mimps.registers.InstructionFetchDecodeRegisters;
@@ -28,11 +30,14 @@ public class Assembler {
 	private Map<String, Integer> functionCodes;
 	private Map<Character, Integer> registerPrefix;
 	private Map<String, Integer> registers;
+	private Map<String, Integer> memoryLabels;
+	private Map<Integer, Integer> memory;
 	private Map<String, String> types;
 	private int origin;
 	private Reader sourceCode;
 	private static final int wordSize = 4;
 	private Instruction currentInstruction;
+	private int memOrigin;
 	private InstructionFetchDecodeRegisters pipeLine;
 	private int pc;
 	
@@ -42,6 +47,11 @@ public class Assembler {
 		s.assemble();
 		s.print();
 
+	}
+	
+	public Assembler(int origin, Reader sourceCode, InstructionFetchDecodeRegisters instructionFetchDecodeRegisters, int memOrigin) {
+		this(origin, sourceCode, instructionFetchDecodeRegisters);
+		this.memOrigin = memOrigin;
 	}
 
 	public Assembler(int origin, Reader sourceCode, InstructionFetchDecodeRegisters instructionFetchDecodeRegisters) {
@@ -59,35 +69,50 @@ public class Assembler {
 		labels = new HashMap<String, Integer>();
 		instructions = new HashMap<Integer, Instruction>();
 		originalLine = new HashMap<Integer, Integer>();
+		memoryLabels = new HashMap<String, Integer>();
+		memory = new HashMap<Integer, Integer>();
 	}
 	
 	public boolean execute(int pc) {
 		if (!instructions.containsKey(pc)) {
+			currentInstruction = new Instruction();
 			return false;
 		}
 		this.pc = pc;
 		currentInstruction = instructions.get(pc);
+		//System.out.println(currentInstruction.toInt());
 		return true;
 	}
 	
-	public void assemble() throws SyntaxErrorException{
+	public Map<Integer, Integer> assemble() throws SyntaxErrorException{
 		LinkedList<String> pureInstructions = firstPass();
 		encodeInstructions(pureInstructions);
+		return memory;
 		
 	}
 	
 	public void print() {
-		for (Integer key : instructions.keySet()) {
-			System.out.println(key + " : " + instructions.get(key).toString());
+
+//		for (Integer key : instructions.keySet()) {
+//			System.out.println(key + " : " + instructions.get(key).getConstant());
+//		}
+		for (Integer key : memory.keySet()) {
+			System.out.println(key + " : " + memory.get(key));
+		}
+		for (String key : memoryLabels.keySet()) {
+			System.out.println(key + " : " + memoryLabels.get(key));
+
 		}
 	}
 	
 	private LinkedList<String> firstPass() throws SyntaxErrorException{
 		LinkedList<String> result = new LinkedList<String>();
+		
 		Scanner sc = new Scanner(sourceCode);
 		int line = 0;
 		int cursor = origin;
 		String instruction;
+		boolean data = false;
 		
 		while (sc.hasNext()) {
 			line++;
@@ -95,34 +120,68 @@ public class Assembler {
 			if (instruction.length() == 0) {
 				continue;
 			}
-			if (isLabeled(instruction)) {
-					String[] splitted = instruction.split(":");
-					String label = splitted[0];
-					if (splitted.length == 1 || splitted[1].trim().length() == 0) {
-						String nearestInstrution;
-						while (sc.hasNext()) {
-							nearestInstrution = cleanLine(sc.nextLine());
-							line++;
-							if (nearestInstrution.length() > 0) {
-								instruction = nearestInstrution;
-								break;
-							}
-						}
-					} else {
-						instruction = splitted[1].trim();
-					}
-					if (instruction.length() == 0) {
-						throw new SyntaxErrorException(line);
-					}
-					
-					labels.put(label, cursor);
-					
+			if (instruction.equals(".data")) {
+				data = true;
+				continue;
+			} else if (instruction.equals(".text")) {
+				data = false;
+				continue;
 			}
-			originalLine.put(cursor, line);
-			result.add(instruction);
-			cursor += wordSize;
+			if (data) {
+				manupilateDataInstruction(instruction, line);
+			} else {
+				if (isLabeled(instruction)) {
+						String[] splitted = instruction.split(":");
+						String label = splitted[0];
+						if (splitted.length == 1 || splitted[1].trim().length() == 0) {
+							String nearestInstrution;
+							while (sc.hasNext()) {
+								nearestInstrution = cleanLine(sc.nextLine());
+								line++;
+								if (nearestInstrution.length() > 0) {
+									instruction = nearestInstrution;
+									break;
+								}
+							}
+						} else {
+							instruction = splitted[1].trim();
+						}
+						if (instruction.length() == 0) {
+							throw new SyntaxErrorException(line);
+						}
+						
+						labels.put(label, cursor);
+						
+				}
+				originalLine.put(cursor, line);
+				result.add(instruction);
+				cursor += wordSize;
+			}
 		}
 		return result;
+	}
+	
+	
+	private void manupilateDataInstruction(String instruction, int line) throws SyntaxErrorException{
+		try {
+			String[] splitted = instruction.split(" ");
+			String label = splitted[0].split(":")[0];
+			String dataType = splitted[1];
+			if (!dataType.equals(".word")) {
+				throw new SyntaxErrorException(line);
+			}
+			if (splitted.length >= 3) {
+				memoryLabels.put(label, memOrigin);
+			}
+			for (int i = 2; i < splitted.length; i++) {
+				System.out.println(splitted[i]);
+				int data = Integer.parseInt(splitted[i]);
+				memory.put(memOrigin, data);
+				memOrigin += wordSize;
+			}
+		} catch(Exception ex) {
+			throw new SyntaxErrorException(line);
+		}
 	}
 	
 	private void encodeInstructions(LinkedList<String> sourceCode) throws SyntaxErrorException {
@@ -187,7 +246,7 @@ public class Assembler {
 				if (!types.containsKey(matcher.group(1)) || !types.get(matcher.group(1)).equals("BRANCHES")) {
 					throw new SyntaxErrorException("Invalid instruction", line);
 				}
-				int relativeAddress = (labels.get(matcher.group(4)) - cursor) / 4;
+				int relativeAddress = (labels.get(matcher.group(4)) - cursor - 4) / 4;
 				
 				result = decodeIInstruction(matcher.group(1), getRegisterNumber(matcher.group(2), line),  getRegisterNumber(matcher.group(3), line), relativeAddress, line);
 			}
@@ -248,13 +307,12 @@ public class Assembler {
 	}
 	
 	private Instruction decodeIInstruction(String name, int rt, int rs, int address, int line) throws SyntaxErrorException {
-		
+		System.out.println(name);
 		Instruction instruction = new Instruction();
 		instruction.setOpcode(opcodes.get(name));
 		instruction.setRt(rt);
 		instruction.setRs(rs);
 		instruction.setConstant(address);
-		
 		return instruction;
 	}
 	
@@ -266,7 +324,8 @@ public class Assembler {
 	}
 	
 	private String cleanLine(String line) {
-		String result = line.replaceAll(" +", " ");
+		String result = line.replaceAll(",", " ");
+		result = result.replaceAll(" +", " ");
 		result = trimEnd(result).trim();
 		result = result.toLowerCase();
 		return result;

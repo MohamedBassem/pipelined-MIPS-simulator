@@ -40,27 +40,27 @@ public class Instruction {
 	}
 	
 	protected void setFunct(int funct) {
-		instruction = BinaryManiplator.setPartialValue(instruction, 0, 5, funct);
+		instruction = BinaryManiplator.setUnsignedPartialValue(instruction, 0, 5, funct);
 	}
 	
 	protected void setShamt(int shamt) {
-		instruction = BinaryManiplator.setPartialValue(instruction, 6, 10, shamt);
+		instruction = BinaryManiplator.setUnsignedPartialValue(instruction, 6, 10, shamt);
 	}
 	
 	protected void setOpcode(int opcode) {
-		instruction = BinaryManiplator.setPartialValue(instruction, 26, 31, opcode);
+		instruction = BinaryManiplator.setUnsignedPartialValue(instruction, 26, 31, opcode);
 	}
 	
 	protected void setRs(int rs) {
-		instruction = BinaryManiplator.setPartialValue(instruction, 21, 25,rs);
+		instruction = BinaryManiplator.setUnsignedPartialValue(instruction, 21, 25,rs);
 	}
 	
 	protected void setRd(int rd) {
-		instruction = BinaryManiplator.setPartialValue(instruction, 11, 15, rd);
+		instruction = BinaryManiplator.setUnsignedPartialValue(instruction, 11, 15, rd);
 	}
 	
 	protected void setRt(int rt) {
-		instruction = BinaryManiplator.setPartialValue(instruction, 16, 20, rt);
+		instruction = BinaryManiplator.setUnsignedPartialValue(instruction, 16, 20, rt);
 	}
 
 	
@@ -77,7 +77,7 @@ public class Instruction {
 	}
 	
 	protected void setJumpAddress(int jumpAddress) {
-		instruction = BinaryManiplator.setPartialValue(instruction, 0, 25, jumpAddress);
+		instruction = BinaryManiplator.setUnsignedPartialValue(instruction, 0, 25, jumpAddress);
 		
 	}
 	
@@ -88,7 +88,7 @@ public class Instruction {
 	public String toString(){
 		String ret = "";
 		for(int i=31;i>=0;i--){
-			ret += (instruction & (1<<i)) > 0 ? '1':'0';
+			ret += (instruction & (1<<i)) != 0 ? '1':'0';
 		}
 		return ret;
 	}

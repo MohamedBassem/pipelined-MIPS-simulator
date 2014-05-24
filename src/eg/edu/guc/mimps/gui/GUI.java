@@ -13,7 +13,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Set;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -21,16 +20,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-
 import eg.edu.guc.mimps.exceptions.SyntaxErrorException;
-import eg.edu.guc.mimps.registers.Memory;
-import eg.edu.guc.mimps.registers.Registers;
 import eg.edu.guc.mimps.simulator.Simulator;
 
 public class GUI {
@@ -38,11 +35,16 @@ public class GUI {
 	JFrame mainFrame;
 	JTable registersTable;
 	JTable memoryTable;
+	JTable IFIDRegistersTable;
+	JTable IDEXRegistersTable;
+	JTable EXMEMRegistersTable;
+	JTable MEMWBRegistersTable;
 	JTextPane editor = new JTextPane();
 	JMenuBar mb;
 	String code = "";
+	private DefaultTableModel memoryTableModel;
 
-	public GUI(Simulator simulator, Memory memory, Registers registers) {
+	public GUI(Simulator simulator) {
 		this.simulator = simulator;
 		startFrame();
 		update();
@@ -52,7 +54,7 @@ public class GUI {
 		mainFrame = new JFrame();
 		JMenuBar menu = getMenuBar();
 		mainFrame.setMinimumSize(new Dimension((int) Toolkit
-				.getDefaultToolkit().getScreenSize().getWidth() / 2,
+				.getDefaultToolkit().getScreenSize().getWidth() / 2 - 200,
 				(int) Toolkit.getDefaultToolkit().getScreenSize().height / 2));
 		mainFrame.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
 		mainFrame.setTitle("MIPS Simulator");
@@ -62,8 +64,14 @@ public class GUI {
 		leftPane.setDividerLocation(490);
 		leftPane.setPreferredSize(new Dimension(1000, (int) Toolkit
 				.getDefaultToolkit().getScreenSize().getHeight()));
+		JTabbedPane tables = new JTabbedPane();
+		tables.addTab("System Registers", getRegistersTable());
+		tables.addTab("IF/ID Register", getIFIDRegistersTable());
+		tables.addTab("ID/EX Register", getIDEXRegistersTable());
+		tables.addTab("EX/MEM Register", getEXMEMRegistersTable());
+		tables.addTab("MEM/WB", getMEMWBRegistersTable());
 		JSplitPane contentPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				leftPane, getRegistersTable());
+				leftPane, tables);
 		contentPane.setDividerLocation(950);
 		mainFrame.setContentPane(contentPane);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -210,6 +218,7 @@ public class GUI {
 							line = reader.readLine();
 						}
 						editor.setText(buffer.toString());
+						assemble.setEnabled(true);
 					} catch (FileNotFoundException e1) {
 						e1.printStackTrace();
 					} catch (IOException e) {
@@ -224,6 +233,130 @@ public class GUI {
 		mb.add(run);
 		mb.add(runStep);
 		return mb;
+	}
+
+	private JScrollPane getMEMWBRegistersTable() {
+		String[] names = {"ALU Result", "Memory Word", "Writeback Register", 
+						"Register Write", "Memory to Register"};
+		DefaultTableModel model = new DefaultTableModel(names, 1);
+		MEMWBRegistersTable = new JTable();
+		MEMWBRegistersTable.setModel(model);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().getALUResult(), 0, 0);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().getMemoryWord(), 0, 1);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().getWriteBackRegister(), 0, 2);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().isRegWrite(), 0, 3);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().isMemToReg(), 0, 4);
+		
+		JScrollPane scroll = new JScrollPane(MEMWBRegistersTable);
+		scroll.setMinimumSize(new Dimension(400, Toolkit.getDefaultToolkit()
+				.getScreenSize().height));
+		return scroll;
+	}
+	
+	private JScrollPane getEXMEMRegistersTable() {
+		String[] names = { "Branch Address", "Zero", "ALU Result", "Register Value to Memory",
+				"Write Back register", "Memory Read", "Memory Write",
+				"Branch", "Register Write", "Memory to Register" };
+		DefaultTableModel model = new DefaultTableModel(names, 1);
+		EXMEMRegistersTable = new JTable();
+		EXMEMRegistersTable.setModel(model);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().getBranchAddress(), 0, 0);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isZero(), 0, 1);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().getALUResult(), 0, 2);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().getRegisterValueToMemory(), 0, 3);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().getWriteBackRegister(), 0, 4);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isMemRead(), 0, 5);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isMemWrite(), 0, 6);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isBranch(), 0, 7);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isRegWrite(), 0, 8);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isMemToReg(), 0, 9);
+		
+		JScrollPane scroll = new JScrollPane(EXMEMRegistersTable);
+		scroll.setMinimumSize(new Dimension(400, Toolkit.getDefaultToolkit()
+				.getScreenSize().height));
+		return scroll;
+	}
+
+	private JScrollPane getIFIDRegistersTable() {
+		String[] names = { "Instruction", "Incremented PC" };
+		DefaultTableModel model = new DefaultTableModel(names, 1);
+		IFIDRegistersTable = new JTable();
+		IFIDRegistersTable.setModel(model);
+		IFIDRegistersTable.setValueAt(simulator
+				.getInstructionFetchDecodeRegisters().getInstruction(), 0, 0);
+		IFIDRegistersTable.setValueAt(simulator
+				.getInstructionFetchDecodeRegisters().getIncrementedPc(), 0, 1);
+		JScrollPane scroll = new JScrollPane(IFIDRegistersTable);
+		scroll.setMinimumSize(new Dimension(400, Toolkit.getDefaultToolkit()
+				.getScreenSize().height));
+		return scroll;
+
+	}
+
+	private JScrollPane getIDEXRegistersTable() {
+		String[] names = { "register 1", "register 2", "Incremented PC",
+				"Sign Extended Offset", "rt", "rd", "Shift amount",
+				"ALU Source", "Register Destination", "ALU Output",
+				"Memory Read", "Memory Write", "Branch", "Register Write",
+				"Memory to Register" };
+		DefaultTableModel model = new DefaultTableModel(names, 1);
+		IDEXRegistersTable = new JTable();
+		IDEXRegistersTable.setModel(model);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getRegister1Value(), 0,
+				0);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getRegister2Value(), 0,
+				1);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getIncrementedPc(), 0,
+				2);
+		IDEXRegistersTable.setValueAt(
+				simulator.getInstructionDecodeExecuteRegisters()
+						.getSignExtendedOffset(), 0, 3);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getRt(), 0, 4);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getRd(), 0, 5);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getShamt(), 0, 6);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isAluSrc(), 0, 7);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isRegDest(), 0, 8);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getAluOpt(), 0, 9);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isMemRead(), 0, 10);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isMemWrite(), 0, 11);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isBranch(), 0, 12);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isRegWrite(), 0, 13);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isMemToReg(), 0, 14);
+
+		JScrollPane scroll = new JScrollPane(IDEXRegistersTable);
+		scroll.setMinimumSize(new Dimension(400, Toolkit.getDefaultToolkit()
+				.getScreenSize().height));
+		return scroll;
+
 	}
 
 	private JScrollPane getRegistersTable() {
@@ -241,8 +374,7 @@ public class GUI {
 			registersTable.setValueAt(i, i, 1);
 		}
 		registersTable.setValueAt("pc", 32, 0);
-		registersTable.setValueAt("hi", 33, 0);
-		registersTable.setValueAt("lo", 34, 0);
+		registersTable.setValueAt("cycles", 33, 0);
 		registersTable.setEnabled(false);
 		JScrollPane scroll = new JScrollPane(registersTable);
 		scroll.setMinimumSize(new Dimension(400, Toolkit.getDefaultToolkit()
@@ -251,14 +383,14 @@ public class GUI {
 	}
 
 	private JScrollPane getMemoryTable() {
-		DefaultTableModel model = new DefaultTableModel(10, 9);
-		memoryTable = new JTable(model);
+		this.memoryTableModel = new DefaultTableModel(0, 2);
+
+		memoryTable = new JTable(memoryTableModel);
 		memoryTable.getColumn(memoryTable.getColumnName(0)).setHeaderValue(
 				"Address");
-		for (int i = 1; i < 9; i++) {
-			memoryTable.getColumn(memoryTable.getColumnName(i)).setHeaderValue(
-					"Value (+" + (i - 1) * 4 + ")");
-		}
+
+		memoryTable.getColumn(memoryTable.getColumnName(1)).setHeaderValue(
+				"Value");
 		Set<Integer> keys = simulator.getMemory().keySet();
 		int i = 0;
 		for (Integer key : keys) {
@@ -276,20 +408,15 @@ public class GUI {
 			registersTable.setValueAt(simulator.getRegisters().getReg(i), i, 2);
 		}
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
+		registersTable.setValueAt(simulator.getCycles(), 33, 2);
+		memoryTableModel.setRowCount(simulator.getMemory().size());
+		Set<Integer> memoryKeys = simulator.getMemory().keySet();
+		int row = 0;
+		for (Integer address : memoryKeys) {
+			memoryTable.setValueAt(String.format("%08x", address), row, 0);
+			memoryTable
+					.setValueAt(simulator.getMemory().get(address), row++, 1);
 
-		for (int j = 0; j < 10; j++) {
-			memoryTable.setValueAt(
-					simulator.getMemory().get(memoryTable.getValueAt(j, 0)), j,
-					1);
-			if (simulator.getMemory().get(memoryTable.getValueAt(j, 0)) != null) {
-				for (int k = 2; k < 9; k++) {
-					memoryTable.setValueAt(
-							simulator.getMemory().get(
-									memoryTable.getValueAt(j, 0))
-									+ (k - 1) * 4, j, k);
-				}
-			}
-			continue;
 		}
 	}
 
