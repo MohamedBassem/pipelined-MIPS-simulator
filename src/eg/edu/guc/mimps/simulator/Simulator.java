@@ -20,81 +20,102 @@ import eg.edu.guc.mimps.registers.MemoryWritebackRegisters;
 import eg.edu.guc.mimps.registers.Registers;
 
 public class Simulator {
-	
+
 	private InstructionFetchDecodeRegisters instructionFetchDecodeRegisters;
 	private InstructionDecodeExecuteRegisters instructionDecodeExecuteRegisters;
 	private ExecuteMemoryRegisters executeMemoryRegisters;
 	private MemoryWritebackRegisters memoryWritebackRegisters;
-	
+
 	private Assembler assembler;
 	private Controller controller;
 	private RegisterFile registerFile;
 	private ALU alu;
 	private DataMemory dataMemory;
-	
+
 	private Memory memory;
 	private Registers registers;
-	
+
 	private int NOPcount;
 	boolean done;
 	private int cycles;
-	
+
 	GUI gui;
-	
+
 	private int pc;
-	
-	public Simulator(){
+
+	public Simulator() {
 		this.reset();
 		gui = new GUI(this);
 	}
-	
-	public void reset(){
+
+	public InstructionFetchDecodeRegisters getInstructionFetchDecodeRegisters() {
+		return instructionFetchDecodeRegisters;
+	}
+
+	public InstructionDecodeExecuteRegisters getInstructionDecodeExecuteRegisters() {
+		return instructionDecodeExecuteRegisters;
+	}
+
+	public ExecuteMemoryRegisters getExecuteMemoryRegisters() {
+		return executeMemoryRegisters;
+	}
+
+	public MemoryWritebackRegisters getMemoryWritebackRegisters() {
+		return memoryWritebackRegisters;
+	}
+
+	public void reset() {
 		instructionFetchDecodeRegisters = new InstructionFetchDecodeRegisters();
 		instructionDecodeExecuteRegisters = new InstructionDecodeExecuteRegisters();
 		executeMemoryRegisters = new ExecuteMemoryRegisters();
 		memoryWritebackRegisters = new MemoryWritebackRegisters();
-		
+
 		NOPcount = 0;
 		done = false;
-		
+
 		cycles = 0;
 		pc = 0;
-		
+
 		this.memory = new Memory();
 		this.registers = new Registers();
-		
-		controller = new Controller(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters);
-		registerFile = new RegisterFile(instructionFetchDecodeRegisters,instructionDecodeExecuteRegisters,
-										memoryWritebackRegisters, registers);
-		alu = new ALU(instructionDecodeExecuteRegisters,executeMemoryRegisters);
-		dataMemory = new DataMemory(executeMemoryRegisters,memoryWritebackRegisters,memory);
+
+		controller = new Controller(instructionFetchDecodeRegisters,
+				instructionDecodeExecuteRegisters);
+		registerFile = new RegisterFile(instructionFetchDecodeRegisters,
+				instructionDecodeExecuteRegisters, memoryWritebackRegisters,
+				registers);
+		alu = new ALU(instructionDecodeExecuteRegisters, executeMemoryRegisters);
+		dataMemory = new DataMemory(executeMemoryRegisters,
+				memoryWritebackRegisters, memory);
 	}
-	
-	public boolean assemble(int origin , String code ) throws SyntaxErrorException{
+
+	public boolean assemble(int origin, String code)
+			throws SyntaxErrorException {
 		this.reset();
 		this.pc = origin;
-		assembler = new Assembler(origin,new StringReader(code),instructionFetchDecodeRegisters);
+		assembler = new Assembler(origin, new StringReader(code),
+				instructionFetchDecodeRegisters);
 		assembler.assemble();
 		return true;
 	}
-	
-	public boolean step(){
-		if(!assembler.execute(pc)){
-			if(NOPcount == 0){
+
+	public boolean step() {
+		if (!assembler.execute(pc)) {
+			if (NOPcount == 0) {
 				done = true;
 				NOPcount++;
-			}else if(NOPcount == 6){
+			} else if (NOPcount == 6) {
 				return false;
-			}else{
+			} else {
 				NOPcount++;
 			}
 		}
-		
+
 		registerFile.execute();
 		controller.execute();
 		alu.execute();
 		dataMemory.execute();
-		
+
 		assembler.write();
 		registerFile.write();
 		controller.write();
@@ -132,23 +153,24 @@ public class Simulator {
 			}
 		}
 	}
-	
-	public int getPc(){
+
+	public int getPc() {
 		return this.pc;
 	}
-	
+
 	public static void main(String[] args) {
 		new Simulator();
 	}
-	
-	public Registers getRegisters(){
+
+	public Registers getRegisters() {
 		return registers;
 	}
-	
-	public Memory getMemory(){
+
+	public Memory getMemory() {
 		return memory;
 	}
-	public int getCycles(){
+
+	public int getCycles() {
 		return cycles;
 	}
 }
