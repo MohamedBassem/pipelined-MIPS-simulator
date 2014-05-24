@@ -418,6 +418,79 @@ public class GUI {
 					.setValueAt(simulator.getMemory().get(address), row++, 1);
 
 		}
+		
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().getALUResult(), 0, 0);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().getMemoryWord(), 0, 1);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().getWriteBackRegister(), 0, 2);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().isRegWrite(), 0, 3);
+		MEMWBRegistersTable.setValueAt(simulator
+				.getMemoryWritebackRegisters().isMemToReg(), 0, 4);
+		
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().getBranchAddress(), 0, 0);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isZero(), 0, 1);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().getALUResult(), 0, 2);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().getRegisterValueToMemory(), 0, 3);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().getWriteBackRegister(), 0, 4);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isMemRead(), 0, 5);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isMemWrite(), 0, 6);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isBranch(), 0, 7);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isRegWrite(), 0, 8);
+		EXMEMRegistersTable.setValueAt(simulator
+				.getExecuteMemoryRegisters().isMemToReg(), 0, 9);
+		
+		IFIDRegistersTable.setValueAt(simulator
+				.getInstructionFetchDecodeRegisters().getInstruction(), 0, 0);
+		IFIDRegistersTable.setValueAt(simulator
+				.getInstructionFetchDecodeRegisters().getIncrementedPc(), 0, 1);
+		
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getRegister1Value(), 0,
+				0);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getRegister2Value(), 0,
+				1);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getIncrementedPc(), 0,
+				2);
+		IDEXRegistersTable.setValueAt(
+				simulator.getInstructionDecodeExecuteRegisters()
+						.getSignExtendedOffset(), 0, 3);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getRt(), 0, 4);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getRd(), 0, 5);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getShamt(), 0, 6);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isAluSrc(), 0, 7);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isRegDest(), 0, 8);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().getAluOpt(), 0, 9);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isMemRead(), 0, 10);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isMemWrite(), 0, 11);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isBranch(), 0, 12);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isRegWrite(), 0, 13);
+		IDEXRegistersTable.setValueAt(simulator
+				.getInstructionDecodeExecuteRegisters().isMemToReg(), 0, 14);
+		
 	}
 
 }
