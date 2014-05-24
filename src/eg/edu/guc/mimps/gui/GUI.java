@@ -52,8 +52,8 @@ public class GUI {
 		mainFrame = new JFrame();
 		JMenuBar menu = getMenuBar();
 		mainFrame.setMinimumSize(new Dimension((int) Toolkit
-				.getDefaultToolkit().getScreenSize().getWidth()/2,
-				(int) Toolkit.getDefaultToolkit().getScreenSize().height/2));
+				.getDefaultToolkit().getScreenSize().getWidth() / 2,
+				(int) Toolkit.getDefaultToolkit().getScreenSize().height / 2));
 		mainFrame.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
 		mainFrame.setTitle("MIPS Simulator");
 		mainFrame.setJMenuBar(menu);
@@ -99,12 +99,12 @@ public class GUI {
 		assemble.setMaximumSize(new Dimension(70, 100));
 		run.setEnabled(false);
 		runStep.setEnabled(false);
-		
-		if(code == "")
+
+		if (code == "")
 			assemble.setEnabled(false);
-		
+
 		editor.addKeyListener(new KeyListener() {
-			
+
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 				run.setEnabled(false);
@@ -114,16 +114,16 @@ public class GUI {
 				simulator.reset();
 				update();
 			}
-			
+
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 			}
-			
+
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 			}
 		});
-		
+
 		assemble.addActionListener(new ActionListener() {
 
 			@Override
@@ -132,7 +132,7 @@ public class GUI {
 					code = editor.getText();
 					simulator.assemble(0, code);
 					assemble.setEnabled(false);
-					
+
 					run.setEnabled(true);
 					runStep.setEnabled(true);
 
@@ -142,7 +142,9 @@ public class GUI {
 								editor.getDocument().getDefaultRootElement()
 										.getElement(e1.getLine() - 1)
 										.getStartOffset(),
-								editor.getDocument().getDefaultRootElement().getElement(e1.getLine() - 1).getEndOffset(),
+								editor.getDocument().getDefaultRootElement()
+										.getElement(e1.getLine() - 1)
+										.getEndOffset(),
 								new DefaultHighlighter.DefaultHighlightPainter(
 										Color.red));
 
@@ -150,9 +152,9 @@ public class GUI {
 						e2.printStackTrace();
 					}
 
-				} 
+				}
 			}
-		}); 
+		});
 
 		run.addActionListener(new ActionListener() {
 
@@ -181,15 +183,16 @@ public class GUI {
 			public void actionPerformed(ActionEvent arg0) {
 				final JFileChooser fc = new JFileChooser();
 				fc.setFileFilter(new FileFilter() {
-					
+
 					@Override
 					public String getDescription() {
 						return null;
 					}
-					
+
 					@Override
 					public boolean accept(File f) {
-						return f.isDirectory() || f.getName().toLowerCase().endsWith(".txt");
+						return f.isDirectory()
+								|| f.getName().toLowerCase().endsWith(".txt");
 					}
 				});
 
@@ -211,8 +214,8 @@ public class GUI {
 						e1.printStackTrace();
 					} catch (IOException e) {
 						e.printStackTrace();
-					} 
-					
+					}
+
 				}
 			}
 		});
@@ -254,12 +257,13 @@ public class GUI {
 				"Address");
 		for (int i = 1; i < 9; i++) {
 			memoryTable.getColumn(memoryTable.getColumnName(i)).setHeaderValue(
-					"Value (+" + (i-1)*4 + ")");
+					"Value (+" + (i - 1) * 4 + ")");
 		}
 		Set<Integer> keys = simulator.getMemory().keySet();
-		int pc = simulator.getPc();
-		for (int i = 0; i < 9; i ++) {
-			memoryTable.setValueAt(pc + i*4, i, 0);
+		int i = 0;
+		for (Integer key : keys) {
+			memoryTable.setValueAt(key, i, 0);
+			i++;
 		}
 		memoryTable.setEnabled(false);
 		JScrollPane scroll = new JScrollPane(memoryTable);
@@ -272,12 +276,20 @@ public class GUI {
 			registersTable.setValueAt(simulator.getRegisters().getReg(i), i, 2);
 		}
 		registersTable.setValueAt(simulator.getPc(), 32, 2);
-		
+
 		for (int j = 0; j < 10; j++) {
-			memoryTable.setValueAt(simulator.getMemory().get(memoryTable.getValueAt(j, 0)), j, 1);
-			/*for(int k = 2; k < 9; k++) {
-				memoryTable.setValueAt(simulator.getMemory().get(memoryTable.getValueAt(j, 0)) + (k-1)*4, j, k);
-			}*/
+			memoryTable.setValueAt(
+					simulator.getMemory().get(memoryTable.getValueAt(j, 0)), j,
+					1);
+			if (simulator.getMemory().get(memoryTable.getValueAt(j, 0)) != null) {
+				for (int k = 2; k < 9; k++) {
+					memoryTable.setValueAt(
+							simulator.getMemory().get(
+									memoryTable.getValueAt(j, 0))
+									+ (k - 1) * 4, j, k);
+				}
+			}
+			continue;
 		}
 	}
 
